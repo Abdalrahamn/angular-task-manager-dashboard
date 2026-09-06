@@ -1,0 +1,44 @@
+@use 'styles/mixins' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+
+  h1 {
+    margin: 0;
+    color: var(--color-grey-13);
+    font-size: var(--font-size-stat-icon);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-32);
+  }
+}
+
+.page__rates,
+.page__charts {
+  display: grid;
+  gap: var(--space-24);
+}
+
+.page__rates,
+.page__charts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rate,
+.chart-card {
+  padding: var(--space-16);
+  border-radius: var(--radius-8);
+  background: var(--color-white-solid);
+  box-shadow: var(--shadow-stat);
+}
+
+.rate__label,
+.chart-card h2 { margin: 0; color: var(--color-grey-46); font-size: var(--font-size-meta); font-weight: var(--font-weight-medium); }
+.rate__value { margin: var(--space-8) 0 0; color: var(--color-grey-13); font-size: var(--font-size-stat-value); font-weight: var(--font-weight-bold); line-height: var(--line-height-384); }
+.rate__meta { margin: var(--space-4) 0 0; color: var(--color-grey-46); font-size: var(--font-size-meta); }
+.chart-card h2 { margin-bottom: var(--space-16); color: var(--color-grey-13); font-weight: var(--font-weight-bold); }
+.chart-card--wide { grid-column: 1 / -1; }
+.page__placeholder { margin: 0; color: var(--color-grey-46); }
+
+@include below-desktop { .page__rates, .page__charts { grid-template-columns: minmax(0, 1fr); } }

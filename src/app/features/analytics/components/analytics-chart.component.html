@@ -1,0 +1,22 @@
+<canvas #canvas aria-hidden="true"></canvas>
+<table class="visually-hidden">
+  <caption>
+    {{
+      label()
+    }}
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">Category</th>
+      <th scope="col">Tasks</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of labels(); track $index; let index = $index) {
+      <tr>
+        <th scope="row">{{ item }}</th>
+        <td>{{ values()[index] }}</td>
+      </tr>
+    }
+  </tbody>
+</table>

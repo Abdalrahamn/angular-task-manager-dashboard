@@ -1,0 +1,70 @@
+<section class="page">
+  <h1>Analytics</h1>
+
+  @if (store.tasksError()) {
+    <app-error-state
+      title="Couldn't load analytics"
+      message="Task data is required for these charts."
+      (retry)="store.retryReads()"
+    />
+  } @else if (store.tasksLoading()) {
+    <div class="page__rates" aria-label="Loading analytics">
+      <app-skeleton variant="stat-card" />
+      <app-skeleton variant="stat-card" />
+    </div>
+  } @else if (series().total === 0) {
+    <app-empty-state title="No task data yet" message="Charts appear once the board has tasks." />
+  } @else {
+    <div class="page__rates">
+      <article class="rate">
+        <p class="rate__label">Completion rate</p>
+        <p class="rate__value">{{ series().completionRate | percent: '1.0-0' }}</p>
+        <p class="rate__meta">
+          {{ series().completed | number }} of {{ series().total | number }} done
+        </p>
+      </article>
+      <article class="rate">
+        <p class="rate__label">Overdue rate</p>
+        <p class="rate__value">{{ series().overdueRate | percent: '1.0-0' }}</p>
+        <p class="rate__meta">{{ series().overdue | number }} open tasks past due</p>
+      </article>
+    </div>
+
+    <div class="page__charts">
+      @defer {
+        <article class="chart-card">
+          <h2>Status</h2>
+          <app-analytics-chart
+            label="Tasks by status"
+            chartType="doughnut"
+            [labels]="statusLabels"
+            [values]="statusValues()"
+            [colors]="['#757575', '#f57c00', '#388e3c']"
+          />
+        </article>
+        <article class="chart-card">
+          <h2>Priority</h2>
+          <app-analytics-chart
+            label="Tasks by priority"
+            chartType="doughnut"
+            [labels]="priorityLabels"
+            [values]="priorityValues()"
+            [colors]="['#d32f2f', '#f57c00', '#388e3c']"
+          />
+        </article>
+        <article class="chart-card chart-card--wide">
+          <h2>Tasks per assignee</h2>
+          <app-analytics-chart
+            label="Assigned tasks"
+            chartType="bar"
+            [labels]="assigneeLabels()"
+            [values]="assigneeValues()"
+            [colors]="['#1976d2']"
+          />
+        </article>
+      } @placeholder {
+        <p class="page__placeholder">Loading charts…</p>
+      }
+    </div>
+  }
+</section>
