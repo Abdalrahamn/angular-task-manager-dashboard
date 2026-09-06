@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.snackbar__dismiss {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-white-solid);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}

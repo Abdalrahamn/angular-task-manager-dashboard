@@ -1,0 +1,23 @@
+<aside
+  id="app-sidebar"
+  class="tw:flex tw:w-[var(--size-sidebar-width)] tw:shrink-0 tw:flex-col tw:overflow-y-auto tw:bg-[var(--color-white-solid)] tw:p-[var(--space-24)] tw:max-lg:fixed tw:max-lg:bottom-0 tw:max-lg:left-0 tw:max-lg:top-[var(--size-header-height)] tw:max-lg:z-[var(--z-sidebar)] tw:max-lg:-translate-x-full tw:max-lg:overflow-auto tw:max-lg:shadow-[var(--shadow-header)] tw:max-lg:transition-transform tw:max-lg:duration-200"
+  [class.tw:!translate-x-0]="open()"
+  [attr.aria-hidden]="open() ? null : 'true'"
+  [attr.inert]="open() ? null : ''"
+  aria-label="Primary"
+>
+  <nav class="tw:flex tw:w-[var(--size-nav-item-width)] tw:flex-col tw:gap-[var(--space-4)]">
+    @for (item of navItems; track item.path) {
+      <app-nav-item [path]="item.path" [label]="item.label" [icon]="item.icon" />
+    }
+  </nav>
+
+  <button
+    type="button"
+    class="tw:mt-[var(--space-52)] tw:inline-flex tw:min-h-[var(--size-nav-item-height)] tw:w-[var(--size-nav-item-width)] tw:items-center tw:justify-center tw:gap-[var(--space-8)] tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-[var(--color-azure-46)] tw:text-[var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)] tw:cursor-pointer tw:max-lg:min-h-[var(--touch-target)]"
+    (click)="create.emit()"
+  >
+    <app-add-icon width="14" height="14" iconClass="" />
+    New Task
+  </button>
+</aside>

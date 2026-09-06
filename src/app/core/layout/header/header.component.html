@@ -1,0 +1,88 @@
+<header
+  class="tw:sticky tw:top-0 tw:z-[var(--z-header)] tw:grid tw:h-[var(--size-header-height)] tw:grid-cols-[minmax(0,1fr)_minmax(0,var(--size-search-width))_minmax(0,1fr)] tw:items-center tw:gap-x-[var(--space-16)] tw:bg-[var(--color-white-solid)] tw:pl-[var(--space-24)] tw:pr-16 tw:shadow-[var(--shadow-header)] tw:max-md:h-auto tw:max-md:grid-cols-[1fr_auto] tw:max-md:grid-rows-[var(--size-header-height)_auto] tw:max-md:gap-y-[var(--space-8)] tw:max-md:pb-[var(--space-8)]"
+>
+  <div class="tw:flex tw:min-w-0 tw:items-center tw:justify-self-start tw:gap-2">
+    @if (showMenuButton()) {
+      <button
+        type="button"
+        class="tw:inline-flex tw:size-[var(--touch-target)] tw:items-center tw:justify-center tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-transparent tw:text-[var(--color-grey-13)] tw:cursor-pointer hover:tw:bg-[var(--color-black-hover-5)]"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="app-sidebar"
+        [attr.aria-label]="menuOpen() ? 'Close navigation' : 'Open navigation'"
+        (click)="onMenuClick()"
+      >
+        <app-menu-icon width="24" height="24" iconClass="" />
+      </button>
+    }
+
+    <a
+      class="header__brand tw:inline-flex tw:h-[var(--size-logo-mark)] tw:items-center tw:gap-2"
+      routerLink="/dashboard"
+    >
+      <span
+        class="tw:inline-flex tw:size-[var(--size-logo-mark)] tw:items-center tw:justify-center tw:rounded-[var(--radius-8)] tw:bg-[var(--color-azure-46)]"
+        aria-hidden="true"
+        >📋</span
+      >
+      <span
+        class="tw:whitespace-nowrap tw:text-[var(--font-size-logo)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-azure-46)]"
+        >Task Manager</span
+      >
+    </a>
+  </div>
+
+  <label
+    class="tw:relative tw:justify-self-center tw:w-full tw:max-w-[var(--size-search-width)] tw:max-md:col-span-full tw:max-md:max-w-none tw:max-md:justify-self-stretch"
+  >
+    <span class="visually-hidden">Search tasks</span>
+    <span
+      class="tw:pointer-events-none tw:absolute tw:left-3 tw:top-1/2 tw:-translate-y-1/2"
+      aria-hidden="true"
+      >🔍</span
+    >
+    <input
+      type="search"
+      placeholder="Search tasks…"
+      autocomplete="off"
+      [value]="search()"
+      (input)="onSearchInput($event)"
+      class="tw:h-[var(--size-search-height)] tw:w-full tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:py-[9px] tw:pl-10 tw:pr-[17px] tw:text-[var(--font-size-search)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-13)] tw:outline-none placeholder:tw:text-[var(--color-grey-46)] focus-visible:tw:border-[var(--color-azure-46)]"
+    />
+  </label>
+
+  <div class="tw:flex tw:items-center tw:justify-self-end tw:gap-4">
+    <div class="tw:relative">
+      <app-icon-button
+        class="tw:inline-flex tw:size-[var(--size-header-control)] tw:items-center tw:justify-center tw:rounded-[var(--radius-20)] tw:border-0 tw:bg-transparent tw:text-[var(--color-grey-13)] tw:cursor-pointer hover:tw:bg-[var(--color-black-hover-5)]"
+        variant="ghost"
+        size="md"
+        ariaLabel="Recent activity"
+        [attr.aria-expanded]="activityOpen()"
+        aria-controls="activity-panel"
+        (clicked)="toggleActivity()"
+      >
+        <span aria-hidden="true">🔔</span>
+      </app-icon-button>
+      @if (activityOpen()) {
+        <div
+          id="activity-panel"
+          class="tw:absolute tw:right-0 tw:top-[calc(100%+var(--space-8))] tw:z-[var(--z-dialog)] tw:rounded-[var(--radius-8)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:shadow-[var(--shadow-stat)]"
+          role="region"
+          aria-label="Recent activity"
+        >
+          <app-activity-panel
+            [items]="activityItems()"
+            [loading]="tasksLoading()"
+            [error]="tasksError()"
+            (retry)="retryTasks.emit()"
+          />
+        </div>
+      }
+    </div>
+    <span
+      class="tw:inline-flex tw:size-[var(--size-header-control)] tw:items-center tw:justify-center tw:rounded-[var(--radius-20)] tw:bg-[var(--color-azure-46)] tw:text-[var(--font-size-avatar-initials)] tw:font-[var(--font-weight-bold)] tw:!text-[var(--color-white-solid)]"
+      aria-label="John Doe"
+      >JD</span
+    >
+  </div>
+</header>

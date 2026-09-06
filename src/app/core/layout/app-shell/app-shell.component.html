@@ -1,0 +1,48 @@
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="tw:flex tw:h-dvh tw:flex-col tw:overflow-hidden tw:bg-[var(--color-grey-97)]">
+  <app-header
+    [menuOpen]="sidebarOpen()"
+    [showMenuButton]="!isDesktop()"
+    [search]="store.search()"
+    [activityItems]="store.activityItems()"
+    [tasksLoading]="store.tasksLoading()"
+    [tasksError]="store.tasksError()"
+    (menuToggle)="toggleSidebar()"
+    (searchChange)="onSearchChange($event)"
+    (retryTasks)="store.retryReads()"
+  />
+
+  <div class="tw:relative tw:flex tw:min-h-0 tw:flex-1">
+    @if (!isDesktop() && sidebarOpen()) {
+      <button
+        type="button"
+        class="shell__backdrop tw:fixed tw:inset-x-0 tw:bottom-0 tw:top-[var(--size-header-height)] tw:z-[var(--z-backdrop)] tw:cursor-pointer tw:border-0 tw:bg-[rgb(0_0_0_/_32%)] tw:p-0"
+        aria-label="Close navigation"
+        (click)="closeSidebar()"
+      ></button>
+    }
+
+    <app-sidebar [open]="sidebarOpen() || isDesktop()" (create)="openCreate()" />
+
+    <main
+      id="main-content"
+      class="tw:min-w-0 tw:flex-1 tw:overflow-auto tw:p-[var(--space-32)] tw:max-md:p-[var(--space-16)]"
+      tabindex="-1"
+    >
+      <router-outlet />
+    </main>
+  </div>
+
+  @if (notifications.message(); as message) {
+    <div
+      class="snackbar tw:fixed tw:right-[var(--space-24)] tw:bottom-[var(--space-24)] tw:z-[var(--z-snackbar)] tw:flex tw:max-w-[min(420px,calc(100vw-48px))] tw:items-center tw:gap-[var(--space-16)] tw:rounded-[var(--radius-4)] tw:bg-[var(--color-grey-13)] tw:px-4 tw:py-3 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-white-solid)] tw:shadow-[var(--shadow-stat)]"
+      role="status"
+      aria-live="polite"
+    >
+      <span>{{ message }}</span>
+      <button type="button" class="snackbar__dismiss" (click)="notifications.clear()">
+        Dismiss
+      </button>
+    </div>
+  }
+</div>
