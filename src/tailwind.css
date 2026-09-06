@@ -1,0 +1,11 @@
+/*
+ * Optional, prefixed Tailwind utility layer for future selective use.
+ *
+ * Preflight is intentionally omitted so Tailwind cannot reset the existing
+ * Figma-based SCSS or Angular Material/CDK styles. Use the `tw:` prefix for
+ * any future Tailwind utilities (for example, `tw:flex`).
+ */
+@layer theme, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
