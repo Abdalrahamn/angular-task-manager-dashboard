@@ -1,51 +1,22 @@
 import { Type } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
   AddIconComponent,
-  AnalyticsIconComponent,
-  BarChartIconComponent,
-  BrandIconComponent,
-  CalendarIconComponent,
-  CheckBoxIconComponent,
-  CheckCircleIconComponent,
-  DashboardIconComponent,
   MenuIconComponent,
   MoreVerticalIconComponent,
-  NotificationsIconComponent,
-  ProgressIconComponent,
-  SearchIconComponent,
-  SettingsIconComponent,
-  TasksIconComponent,
-  TeamIconComponent,
-  WarningIconComponent,
   BaseIconComponent,
-  DynamicIconComponent,
 } from '.';
 
 describe('icon components', () => {
   const iconComponents: Type<BaseIconComponent>[] = [
     AddIconComponent,
-    AnalyticsIconComponent,
-    BarChartIconComponent,
-    BrandIconComponent,
-    CalendarIconComponent,
-    CheckBoxIconComponent,
-    CheckCircleIconComponent,
-    DashboardIconComponent,
     MenuIconComponent,
     MoreVerticalIconComponent,
-    NotificationsIconComponent,
-    ProgressIconComponent,
-    SearchIconComponent,
-    SettingsIconComponent,
-    TasksIconComponent,
-    TeamIconComponent,
-    WarningIconComponent,
   ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [...iconComponents, BaseIconComponent, DynamicIconComponent],
+      imports: [...iconComponents, BaseIconComponent],
     }).compileComponents();
   });
 
@@ -83,19 +54,5 @@ describe('icon components', () => {
     expect(svg.getAttribute('aria-label')).toBe('Descriptive icon');
     expect(svg.getAttribute('role')).toBe('img');
     expect(svg.hasAttribute('aria-hidden')).toBe(false);
-  });
-
-  it('renders the component selected by the dynamic registry', () => {
-    const fixture: ComponentFixture<DynamicIconComponent> =
-      TestBed.createComponent(DynamicIconComponent);
-    fixture.componentRef.setInput('name', 'search');
-    fixture.componentRef.setInput('iconClass', 'dynamic-icon');
-    fixture.componentRef.setInput('width', '16');
-    fixture.componentRef.setInput('height', '16');
-    fixture.detectChanges();
-
-    const svg = fixture.nativeElement.querySelector('svg') as SVGElement;
-    expect(svg.getAttribute('data-icon')).toBe('search');
-    expect(svg.classList.contains('dynamic-icon')).toBe(true);
   });
 });

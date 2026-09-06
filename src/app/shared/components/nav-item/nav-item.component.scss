@@ -24,12 +24,7 @@
   }
 }
 
-.nav-item--muted {
-  color: var(--color-grey-46);
-}
-
-.nav-item--active,
-.nav-item--active-variant {
+.nav-item--active {
   background: var(--color-azure-46);
   color: var(--color-white-solid);
 
