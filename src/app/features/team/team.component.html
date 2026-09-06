@@ -1,0 +1,48 @@
+<section class="page">
+  <h1>Team</h1>
+  <p class="page__lead">People are derived from task assignees. There is no users API.</p>
+
+  @if (store.tasksError()) {
+    <app-error-state
+      title="Couldn't load the team"
+      message="Assignees come from the task list. Retry to load it again."
+      (retry)="store.retryReads()"
+    />
+  } @else if (store.tasksLoading()) {
+    <div class="page__grid" aria-label="Loading team">
+      @for (item of [1, 2, 3]; track item) {
+        <app-skeleton variant="stat-card" />
+      }
+    </div>
+  } @else if (members().length === 0) {
+    <app-empty-state
+      title="No teammates yet"
+      message="Assignees appear here after tasks are assigned."
+    />
+  } @else {
+    <div class="page__grid">
+      @for (member of members(); track member.assignee.id) {
+        <article class="card">
+          <div class="card__identity">
+            <app-user-avatar [assignee]="member.assignee" size="md" />
+            <div>
+              <h2>{{ member.assignee.name }}</h2>
+              <p>{{ member.assignee.email }}</p>
+            </div>
+          </div>
+          <dl class="card__stats">
+            <div>
+              <dt>Assigned</dt><dd>{{ member.total }}</dd>
+            </div>
+            <div>
+              <dt>In progress</dt><dd>{{ member.inProgress }}</dd>
+            </div>
+            <div>
+              <dt>Completed</dt><dd>{{ member.done }}</dd>
+            </div>
+          </dl>
+        </article>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,16 @@
+.page {
+  h1 {
+    margin: 0;
+    color: var(--color-grey-13);
+    font-size: var(--font-size-stat-icon);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-32);
+  }
+
+  p {
+    margin: var(--space-8) 0 0;
+    color: var(--color-grey-46);
+    font-size: var(--font-size-meta);
+    line-height: var(--line-height-192);
+  }
+}
