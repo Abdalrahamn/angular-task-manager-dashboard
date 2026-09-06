@@ -6,8 +6,10 @@ test('creates, edits, filters, moves, and deletes a task', async ({ page, isMobi
   const createdTitle = `Playwright planning task ${Date.now()}`;
   await page.goto('/dashboard');
   await page.getByRole('button', { name: 'New Task' }).first().click();
-  await page.getByLabel('Title *').fill(createdTitle);
-  await page.getByLabel('Description *').fill('Created by the browser smoke suite.');
+  await page.locator('input[formcontrolname="title"]').fill(createdTitle);
+  await page
+    .locator('textarea[formcontrolname="description"]')
+    .fill('Created by the browser smoke suite.');
   await page.getByLabel('Due Date *').fill('2099-12-31');
   await page.getByLabel('Assignee *').selectOption({ index: 1 });
   await page.getByRole('button', { name: 'Create' }).click();
@@ -17,7 +19,7 @@ test('creates, edits, filters, moves, and deletes a task', async ({ page, isMobi
 
   await card.getByRole('button', { name: 'Task actions' }).click();
   await page.getByRole('menuitem', { name: 'Edit' }).click();
-  await page.getByLabel('Title *').fill(`${createdTitle} updated`);
+  await page.locator('input[formcontrolname="title"]').fill(`${createdTitle} updated`);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(page.getByText(`${createdTitle} updated`, { exact: true })).toBeVisible();
 
