@@ -3,35 +3,27 @@ import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { NotificationService } from '../../core/services/notification.service';
 import { Task } from '../models/task.model';
-import { TaskActivityStore } from './task-activity.store';
 import { TaskService } from './task.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskMutationService {
   private readonly tasksApi = inject(TaskService);
   private readonly notifications = inject(NotificationService);
-  private readonly activity = inject(TaskActivityStore);
   private readonly submittingState = signal(false);
 
   readonly submitting = this.submittingState.asReadonly();
 
   create(task: Task): Observable<Task> {
-    return this.run(this.tasksApi.create(task), 'Unable to save the task.', (created) => {
-      this.activity.append('create', created);
-    });
+    return this.run(this.tasksApi.create(task), 'Unable to save the task.');
   }
 
   update(task: Task): Observable<Task> {
     const updatedTask = { ...task, updatedAt: new Date().toISOString() };
-    return this.run(this.tasksApi.update(updatedTask), 'Unable to save the task.', (updated) => {
-      this.activity.append('edit', updated);
-    });
+    return this.run(this.tasksApi.update(updatedTask), 'Unable to save the task.');
   }
 
   delete(task: Task): Observable<void> {
-    return this.run(this.tasksApi.delete(task.id), 'Unable to delete the task.', () => {
-      this.activity.append('delete', task);
-    });
+    return this.run(this.tasksApi.delete(task.id), 'Unable to delete the task.');
   }
 
   changeStatus(task: Task, status: Task['status']): Observable<Task> {
@@ -40,14 +32,13 @@ export class TaskMutationService {
     return this.run(
       this.tasksApi.patch(task.id, { status, completedAt, updatedAt }),
       'Unable to update the task status.',
-      (updated) => this.activity.append(status === 'done' ? 'complete' : 'status_change', updated),
     );
   }
 
   private run<T>(
     work: Observable<T>,
     failureMessage: string,
-    onSuccess: (value: T) => void,
+    onSuccess?: (value: T) => void,
   ): Observable<T> {
     if (this.submittingState()) {
       return EMPTY;

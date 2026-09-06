@@ -1,0 +1,9 @@
+<button
+  type="button"
+  [class]="'icon-button icon-button--' + variant() + ' icon-button--' + size()"
+  [attr.aria-label]="ariaLabel()"
+  [disabled]="disabled()"
+  (click)="clicked.emit($event)"
+>
+  <ng-content />
+</button>

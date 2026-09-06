@@ -1,0 +1,31 @@
+<article
+  class="stat-card"
+>
+  <div class="stat-card__title-row">
+    <span
+      class="stat-card__icon"
+      aria-hidden="true"
+      [style.color]="statistic().color"
+      >{{ statistic().icon }}</span
+    >
+    <h2
+      class="stat-card__title"
+    >
+      {{ statistic().title }}
+    </h2>
+  </div>
+  <p
+    class="stat-card__value"
+  >
+    {{ statistic().value }}
+  </p>
+  <p
+    class="stat-card__change"
+    [attr.data-type]="statistic().changeType"
+  >
+    @if (statistic().change !== '0') {
+      <span>{{ statistic().change }}</span>
+    }
+    <span class="stat-card__change-label">{{ statistic().changeLabel }}</span>
+  </p>
+</article>

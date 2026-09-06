@@ -1,4 +1,3 @@
-import { ActivityItem } from '../models/activity.model';
 import { AnalyticsSeries, AssigneeWorkload } from '../models/analytics.model';
 import { TaskColumns } from '../models/kanban.model';
 import { Statistic } from '../models/statistic.model';
@@ -167,19 +166,6 @@ export function mergeTaskOrder(order: string[], tasks: Task[]): string[] {
 
 export function taskOrderFromColumns(columns: TaskColumns): string[] {
   return [...columns.todo, ...columns.in_progress, ...columns.done].map((task) => task.id);
-}
-
-export function seedActivityItems(tasks: Task[]): ActivityItem[] {
-  return [...tasks]
-    .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))
-    .slice(0, 8)
-    .map((task) => ({
-      id: `seed-${task.id}`,
-      action: task.status === 'done' || task.completedAt ? 'complete' : 'edit',
-      taskId: task.id,
-      title: task.title,
-      at: task.completedAt ?? task.updatedAt,
-    }));
 }
 
 export function emptyTaskColumns(): TaskColumns {

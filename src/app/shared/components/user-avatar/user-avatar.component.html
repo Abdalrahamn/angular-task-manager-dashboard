@@ -1,0 +1,8 @@
+<span
+  class="tw:inline-flex tw:size-[var(--size-avatar-sm)] tw:shrink-0 tw:items-center tw:justify-center tw:rounded-[var(--radius-12)] tw:bg-[var(--color-azure-46)] tw:!text-[length:var(--font-size-badge)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-16)] tw:!text-[color:var(--color-white-solid)]"
+  [class.!tw:size-[var(--size-header-control)]]="size() === 'md'"
+  [class.!tw:rounded-[var(--radius-20)]]="size() === 'md'"
+  [class.!tw:text-[length:var(--font-size-avatar-initials)]]="size() === 'md'"
+  [attr.aria-label]="assignee().name"
+  >{{ assignee().avatar }}</span
+>

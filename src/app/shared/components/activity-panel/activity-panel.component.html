@@ -1,0 +1,44 @@
+<div
+  class="tw:flex tw:w-[min(360px,calc(100vw-48px))] tw:max-h-[min(420px,70vh)] tw:flex-col tw:gap-[var(--space-8)] tw:overflow-auto tw:p-[var(--space-16)]"
+>
+  <h2
+    class="tw:m-0 tw:text-[var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)]"
+  >
+    Recent activity
+  </h2>
+  @if (error()) {
+    <app-error-state
+      title="Couldn't load activity"
+      message="Unable to load tasks. Please try again."
+      (retry)="retry.emit()"
+    />
+  } @else if (loading()) {
+    <div aria-label="Loading recent activity">
+      <app-skeleton variant="task-card" />
+    </div>
+  } @else if (items().length === 0) {
+    <app-empty-state
+      title="No recent activity"
+      message="Create, edit, or complete a task to see it here."
+    />
+  } @else {
+    <ul class="tw:m-0 tw:list-none tw:p-0">
+      @for (item of items(); track item.id) {
+        <li
+          class="tw:border-b tw:border-[var(--color-grey-88)] tw:py-[var(--space-8)] last:tw:border-b-0"
+        >
+          <p
+            class="tw:m-0 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-13)]"
+          >
+            {{ description(item) }}
+          </p>
+          <time
+            class="tw:text-[var(--font-size-priority)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-46)]"
+            [attr.datetime]="item.at"
+            >{{ item.at | date: 'MMM d, y, h:mm a' }}</time
+          >
+        </li>
+      }
+    </ul>
+  }
+</div>

@@ -1,0 +1,22 @@
+<div
+  class="tw:flex tw:flex-col tw:items-start tw:gap-[var(--space-8)] tw:rounded-[var(--radius-8)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-24)]"
+  role="alert"
+>
+  <p
+    class="tw:m-0 tw:text-[var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+  >
+    {{ title() }}
+  </p>
+  <p
+    class="tw:m-0 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+  >
+    {{ message() }}
+  </p>
+  <button
+    type="button"
+    class="tw:min-h-[var(--size-filter-tab-height)] tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-azure-46)] tw:bg-[var(--color-white-solid)] tw:px-[var(--space-16)] tw:text-[var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-azure-46)] tw:cursor-pointer"
+    (click)="retry.emit()"
+  >
+    Retry
+  </button>
+</div>

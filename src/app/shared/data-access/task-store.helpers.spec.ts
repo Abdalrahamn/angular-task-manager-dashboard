@@ -8,7 +8,6 @@ import {
   filterTasks,
   groupTasks,
   mergeTaskOrder,
-  seedActivityItems,
   taskOrderFromColumns,
 } from './task-store.helpers';
 
@@ -206,36 +205,4 @@ describe('task store helpers', () => {
     expect(emptyTaskColumns()).toEqual({ todo: [], in_progress: [], done: [] });
   });
 
-  it('seeds at most eight newest activity items with completion timestamps', () => {
-    const completedWithoutStatus: Task = {
-      ...todo,
-      id: 'task-004',
-      completedAt: '2026-01-04T00:00:00.000Z',
-      updatedAt: '2026-01-04T00:00:00.000Z',
-    };
-    const olderTasks = Array.from({ length: 6 }, (_, index) => ({
-      ...todo,
-      id: `old-${index}`,
-      updatedAt: `2025-01-0${index + 1}T00:00:00.000Z`,
-    }));
-    const activity = seedActivityItems([
-      todo,
-      inProgress,
-      done,
-      completedWithoutStatus,
-      ...olderTasks,
-    ]);
-
-    expect(activity).toHaveLength(8);
-    expect(activity[0]).toMatchObject({
-      id: 'seed-task-004',
-      action: 'complete',
-      at: completedWithoutStatus.completedAt,
-    });
-    expect(activity.find((item) => item.taskId === done.id)?.action).toBe('complete');
-    expect(activity.find((item) => item.taskId === inProgress.id)).toMatchObject({
-      action: 'edit',
-      at: inProgress.updatedAt,
-    });
-  });
 });

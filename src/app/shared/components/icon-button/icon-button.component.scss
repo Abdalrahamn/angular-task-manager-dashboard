@@ -1,0 +1,64 @@
+:host {
+  display: inline-flex;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-grey-13);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.icon-button--sm {
+  width: 28px;
+  height: 28px;
+}
+.icon-button--md {
+  width: 40px;
+  height: 40px;
+}
+.icon-button--lg {
+  width: 48px;
+  height: 48px;
+}
+.icon-button--ghost:hover {
+  background: var(--color-black-hover-5);
+  border-radius: var(--radius-20);
+}
+.icon-button--primary,
+.icon-button--primary-compact {
+  background: var(--color-azure-46);
+  color: var(--color-white-solid);
+}
+.icon-button--primary:hover,
+.icon-button--primary-compact:hover {
+  box-shadow: var(--shadow-todo-hover);
+}
+.icon-button--primary {
+  width: 100%;
+  min-width: 192px;
+  height: 30px;
+}
+.icon-button--primary-compact {
+  width: 48px;
+  height: 30px;
+}
+.icon-button--outlined {
+  border-color: var(--color-grey-88);
+}
+.icon-button--outlined:hover {
+  background: var(--color-black-hover-5);
+}

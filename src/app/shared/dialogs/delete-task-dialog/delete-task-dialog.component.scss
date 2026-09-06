@@ -1,0 +1,56 @@
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-width: min(420px, 100%);
+  padding: var(--space-24);
+}
+
+.dialog__title {
+  margin: 0;
+  color: var(--color-grey-13);
+  font-size: var(--font-size-stat-icon);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-32);
+}
+
+.dialog__copy {
+  margin: 0;
+  color: var(--color-grey-46);
+  font-size: var(--font-size-meta);
+  line-height: var(--line-height-192);
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}
+
+.dialog__cancel,
+.dialog__confirm {
+  cursor: pointer;
+}
+
+.dialog__cancel {
+  border: 0;
+  background: transparent;
+  color: var(--color-grey-46);
+  font-size: var(--font-size-meta);
+}
+
+.dialog__confirm {
+  min-width: 88px;
+  height: var(--size-filter-tab-height);
+  border: 0;
+  border-radius: var(--radius-4);
+  background: var(--color-red-51);
+  color: var(--color-white-solid);
+  font-size: var(--font-size-new-task);
+  font-weight: var(--font-weight-medium);
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

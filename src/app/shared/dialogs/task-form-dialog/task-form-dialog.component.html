@@ -1,0 +1,98 @@
+<form class="dialog" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <h2 class="dialog__title">{{ title }}</h2>
+
+  <label class="field">
+    <span class="field__label">Title *</span>
+    <input type="text" formControlName="title" autocomplete="off" required aria-required="true" />
+    @if (showError('title', 'required') || showError('title', 'noWhitespace')) {
+      <span class="field__error">Title is required.</span>
+    }
+  </label>
+
+  <label class="field">
+    <span class="field__label">Description *</span>
+    <textarea formControlName="description" rows="4" required aria-required="true"></textarea>
+    @if (showError('description', 'required') || showError('description', 'noWhitespace')) {
+      <span class="field__error">Description is required.</span>
+    }
+  </label>
+
+  <div class="dialog__row">
+    <label class="field">
+      <span class="field__label">Priority *</span>
+      <select formControlName="priority" required aria-required="true">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      @if (showError('priority', 'required')) {
+        <span class="field__error">Priority is required.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">Status *</span>
+      <select formControlName="status" required aria-required="true">
+        <option value="todo">To Do</option>
+        <option value="in_progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      @if (showError('status', 'required')) {
+        <span class="field__error">Status is required.</span>
+      }
+    </label>
+  </div>
+
+  <div class="dialog__row">
+    <label class="field">
+      <span class="field__label">Due Date *</span>
+      <input type="date" formControlName="dueDate" required aria-required="true" />
+      @if (showError('dueDate', 'required')) {
+        <span class="field__error">Due date is required.</span>
+      } @else if (showError('dueDate', 'dueDate')) {
+        <span class="field__error">{{ dueDateMessage() }}</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">Assignee *</span>
+      <select formControlName="assigneeId" required aria-required="true">
+        <option value="">Select assignee</option>
+        @for (assignee of assignees(); track assignee.id) {
+          <option [value]="assignee.id">{{ assignee.name }}</option>
+        }
+      </select>
+      @if (showError('assigneeId', 'required')) {
+        <span class="field__error">Assignee is required.</span>
+      }
+    </label>
+  </div>
+
+  <fieldset class="field" formArrayName="tags">
+    <legend class="field__label field__label--tags">Tags</legend>
+    @for (tag of tags.controls; track $index) {
+      <div class="tag-row">
+        <input type="text" [formControlName]="$index" [attr.aria-label]="'Tag ' + ($index + 1)" />
+        <button
+          type="button"
+          class="tag-row__remove tw:disabled:cursor-not-allowed tw:disabled:opacity-40"
+          [disabled]="tags.length <= 1"
+          (click)="removeTag($index)"
+        >
+          Remove
+        </button>
+      </div>
+      @if (showTagError($index, 'noWhitespace')) {
+        <span class="field__error">Tag cannot be only whitespace.</span>
+      }
+    }
+    <button type="button" class="dialog__link" (click)="addTag()">Add tag</button>
+  </fieldset>
+
+  <div class="dialog__actions">
+    <button type="button" class="dialog__cancel" (click)="cancel()">Cancel</button>
+    <button type="submit" class="dialog__submit" [disabled]="store.submitting()">
+      {{ store.submitting() ? 'Saving…' : isEdit ? 'Save' : 'Create' }}
+    </button>
+  </div>
+</form>

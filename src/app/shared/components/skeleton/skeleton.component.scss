@@ -1,0 +1,82 @@
+:host {
+  display: block;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.skeleton[data-variant='stat-card'] {
+  min-height: var(--size-stat-card-height);
+  padding: 23px 24px 24px;
+  border-radius: var(--radius-8);
+  background: var(--color-white-solid);
+  box-shadow: var(--shadow-stat);
+}
+
+.skeleton[data-variant='task-card'] {
+  min-height: var(--size-task-card-min-height);
+  padding: var(--space-16);
+  border: 1px solid var(--color-grey-88);
+  border-radius: var(--radius-8);
+  background: var(--color-white-solid);
+}
+
+.skeleton__block {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-4);
+  background: linear-gradient(
+    90deg,
+    var(--color-grey-88) 0%,
+    var(--color-grey-97) 50%,
+    var(--color-grey-88) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton__block--title {
+  width: 48%;
+}
+
+.skeleton__block--value {
+  width: 32%;
+  height: 32px;
+  margin-top: var(--space-24);
+}
+
+.skeleton__block--meta {
+  width: 40%;
+  margin-top: auto;
+}
+
+.skeleton__block--chip {
+  width: 72px;
+}
+
+.skeleton__block--heading {
+  width: 70%;
+  height: 16px;
+}
+
+.skeleton__block--body {
+  width: 100%;
+}
+
+.skeleton__block--footer {
+  width: 36%;
+  margin-top: auto;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}

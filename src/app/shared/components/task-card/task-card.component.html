@@ -1,0 +1,63 @@
+<article
+  class="task-card tw:flex tw:min-h-[var(--size-task-card-min-height)] tw:w-full tw:flex-col tw:rounded-[var(--radius-8)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
+  [class.task-card--overdue]="overdue()"
+  [class.task-card--todo]="task().status === 'todo' && !overdue()"
+  [class.task-card--in-progress]="task().status === 'in_progress' && !overdue()"
+  [class.task-card--completed]="completed()"
+>
+  <div class="tw:flex tw:items-start tw:justify-between tw:gap-2">
+    <span class="task-card__priority" [attr.data-priority]="task().priority">{{
+      task().priority
+    }}</span>
+    <button
+      type="button"
+      class="task-card__menu"
+      aria-label="Task actions"
+      [matMenuTriggerFor]="actions"
+    >
+      <app-more-vertical-icon width="16" height="16" iconClass="" />
+    </button>
+    <mat-menu #actions="matMenu" panelClass="task-card-menu">
+      <button type="button" mat-menu-item (click)="edit.emit(task())">Edit</button>
+      @if (task().status !== 'todo') {
+        <button type="button" mat-menu-item (click)="move.emit({ task: task(), status: 'todo' })">
+          Move to To Do
+        </button>
+      }
+      @if (task().status !== 'in_progress') {
+        <button
+          type="button"
+          mat-menu-item
+          (click)="move.emit({ task: task(), status: 'in_progress' })"
+        >
+          Move to In Progress
+        </button>
+      }
+      @if (task().status !== 'done') {
+        <button type="button" mat-menu-item (click)="move.emit({ task: task(), status: 'done' })">
+          Move to Done
+        </button>
+      }
+      <button type="button" mat-menu-item (click)="remove.emit(task())">Delete</button>
+    </mat-menu>
+  </div>
+
+  <h3 class="task-card__title">{{ task().title }}</h3>
+  <p class="task-card__description">{{ task().description }}</p>
+
+  <div class="task-card__status tw:flex tw:items-center tw:gap-1">
+    <span class="task-card__status-icon" aria-hidden="true">{{
+      statusIcon()
+    }}</span>
+    <span>{{ status().label }}</span>
+  </div>
+
+  @if (category(); as categoryLabel) {
+    <span class="task-card__category">{{ categoryLabel }}</span>
+  }
+
+  <footer class="task-card__footer tw:mt-auto tw:flex tw:items-center tw:gap-1">
+    <app-user-avatar class="tw:flex-none" [assignee]="task().assignee" />
+    <span class="task-card__handle">{{ handle() }}</span>
+  </footer>
+</article>

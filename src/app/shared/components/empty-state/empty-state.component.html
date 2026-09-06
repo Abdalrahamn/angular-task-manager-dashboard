@@ -1,0 +1,16 @@
+<div
+  class="tw:flex tw:min-h-[var(--size-task-card-min-height)] tw:flex-col tw:items-center tw:justify-center tw:gap-[var(--space-4)] tw:p-[var(--space-16)] tw:text-center"
+>
+  <p
+    class="tw:m-0 tw:text-[var(--font-size-card-title)] tw:font-[var(--font-weight-medium)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)]"
+  >
+    {{ title() }}
+  </p>
+  @if (message()) {
+    <p
+      class="tw:m-0 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+    >
+      {{ message() }}
+    </p>
+  }
+</div>

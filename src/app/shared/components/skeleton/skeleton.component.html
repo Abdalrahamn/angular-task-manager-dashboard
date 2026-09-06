@@ -1,0 +1,15 @@
+<div class="skeleton" [attr.data-variant]="variant()" aria-hidden="true">
+  @if (variant() === 'stat-card') {
+    <span class="skeleton__block skeleton__block--title"></span>
+    <span class="skeleton__block skeleton__block--value"></span>
+    <span class="skeleton__block skeleton__block--meta"></span>
+  } @else if (variant() === 'task-card') {
+    <span class="skeleton__block skeleton__block--chip"></span>
+    <span class="skeleton__block skeleton__block--heading"></span>
+    <span class="skeleton__block skeleton__block--body"></span>
+    <span class="skeleton__block skeleton__block--body"></span>
+    <span class="skeleton__block skeleton__block--footer"></span>
+  } @else {
+    <span class="skeleton__block"></span>
+  }
+</div>
