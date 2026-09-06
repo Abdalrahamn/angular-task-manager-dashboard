@@ -19,6 +19,7 @@
     "data:prepare": "node data-fetching/prepare-db.js",
     "data": "npm run data:generate && npm run data:prepare",
     "start:api": "json-server --watch data-fetching/db.json --port 3000",
+    "start:api:e2e": "json-server data-fetching/db.json --host 0.0.0.0 --port 3000",
     "start:all": "concurrently -n api,app -c blue,green \"npm run start:api -- --host 0.0.0.0\" \"npm start -- --host 127.0.0.1 --port 4200\""
   },
   "lint-staged": {

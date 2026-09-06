@@ -30,13 +30,27 @@ function sendFile(res, filePath) {
   createReadStream(filePath).pipe(res);
 }
 
-createServer((req, res) => {
-  const requestPath = decodeURIComponent((req.url ?? '/').split('?')[0]);
+const server = createServer((req, res) => {
+  let requestPath = '/';
+  try {
+    requestPath = decodeURIComponent((req.url ?? '/').split('?')[0] ?? '/');
+  } catch {
+    res.writeHead(400).end();
+    return;
+  }
+
   const candidate = normalize(join(root, requestPath));
   const relativePath = relative(root, candidate);
   const escaped = relativePath.startsWith('..') || relativePath.includes(`..${sep}`);
   const existingFile = !escaped && existsSync(candidate) && statSync(candidate).isFile();
   sendFile(res, existingFile ? candidate : indexFile);
-}).listen(port, host, () => {
+});
+
+server.on('error', (error) => {
+  console.error(error);
+  process.exit(1);
+});
+
+server.listen(port, host, () => {
   console.log(`Serving ${root} at http://${host}:${port}`);
 });

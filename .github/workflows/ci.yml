@@ -25,5 +25,6 @@ jobs:
       - run: npm run lint
       - run: npm run test:coverage
       - run: npm run build
+      - run: test -f dist/task-manager/browser/index.html
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -- --project=chromium
