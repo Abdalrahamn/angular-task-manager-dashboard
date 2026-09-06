@@ -1,0 +1,12 @@
+dist
+coverage
+.angular
+node_modules
+out-tsc
+package-lock.json
+data-fetching/generate-data.js
+data-fetching/tasks.json
+data-fetching/statistics.json
+data-fetching/db.json
+DATA_README.md
+SENIOR_ANGULAR_DEVELOPER_ASSIGNMENT.md
