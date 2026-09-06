@@ -1,0 +1,83 @@
+<div class="board-tabs" role="tablist" aria-label="Kanban status columns">
+  <button
+    id="kanban-tab-todo"
+    type="button"
+    role="tab"
+    [attr.aria-selected]="activeStatus() === 'todo'"
+    aria-controls="kanban-panel-todo"
+    [tabIndex]="activeStatus() === 'todo' ? 0 : -1"
+    (click)="selectStatus('todo')"
+    (keydown)="onTabKeydown($event, 'todo')"
+  >
+    To Do
+  </button>
+  <button
+    id="kanban-tab-in_progress"
+    type="button"
+    role="tab"
+    [attr.aria-selected]="activeStatus() === 'in_progress'"
+    aria-controls="kanban-panel-in_progress"
+    [tabIndex]="activeStatus() === 'in_progress' ? 0 : -1"
+    (click)="selectStatus('in_progress')"
+    (keydown)="onTabKeydown($event, 'in_progress')"
+  >
+    In Progress
+  </button>
+  <button
+    id="kanban-tab-done"
+    type="button"
+    role="tab"
+    [attr.aria-selected]="activeStatus() === 'done'"
+    aria-controls="kanban-panel-done"
+    [tabIndex]="activeStatus() === 'done' ? 0 : -1"
+    (click)="selectStatus('done')"
+    (keydown)="onTabKeydown($event, 'done')"
+  >
+    Done
+  </button>
+</div>
+
+<div class="board" cdkDropListGroup>
+  <app-kanban-column
+    id="kanban-panel-todo"
+    role="tabpanel"
+    aria-labelledby="kanban-tab-todo"
+    [class.board__column--active]="activeStatus() === 'todo'"
+    title="To Do"
+    status="todo"
+    [tasks]="columns().todo"
+    [dragDisabled]="dragDisabled()"
+    (editTask)="editTask.emit($event)"
+    (deleteTask)="deleteTask.emit($event)"
+    (moveTask)="moveTask.emit($event)"
+    (dropped)="dropped.emit($event)"
+  />
+  <app-kanban-column
+    id="kanban-panel-in_progress"
+    role="tabpanel"
+    aria-labelledby="kanban-tab-in_progress"
+    [class.board__column--active]="activeStatus() === 'in_progress'"
+    title="In Progress"
+    status="in_progress"
+    [tasks]="columns().in_progress"
+    [dragDisabled]="dragDisabled()"
+    (editTask)="editTask.emit($event)"
+    (deleteTask)="deleteTask.emit($event)"
+    (moveTask)="moveTask.emit($event)"
+    (dropped)="dropped.emit($event)"
+  />
+  <app-kanban-column
+    id="kanban-panel-done"
+    role="tabpanel"
+    aria-labelledby="kanban-tab-done"
+    [class.board__column--active]="activeStatus() === 'done'"
+    title="Done"
+    status="done"
+    [tasks]="columns().done"
+    [dragDisabled]="dragDisabled()"
+    (editTask)="editTask.emit($event)"
+    (deleteTask)="deleteTask.emit($event)"
+    (moveTask)="moveTask.emit($event)"
+    (dropped)="dropped.emit($event)"
+  />
+</div>

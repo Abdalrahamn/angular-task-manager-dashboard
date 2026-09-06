@@ -1,0 +1,73 @@
+<div
+  class="tw:flex tw:min-h-[var(--size-filter-bar-height)] tw:items-center tw:justify-between tw:gap-[var(--space-16)] tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:px-[var(--space-16)] tw:pb-[var(--space-8)] tw:pt-[var(--space-16)] tw:shadow-[var(--shadow-filter)] tw:max-md:flex-col tw:max-md:items-stretch"
+>
+  <div
+    class="tw:flex tw:items-center tw:gap-[var(--space-4)] tw:max-md:flex-wrap"
+    role="group"
+    aria-label="Task status"
+  >
+    @for (tab of tabs; track tab.id) {
+      <button
+        type="button"
+        class="tw:h-[var(--size-filter-tab-height)] tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-transparent tw:px-[var(--space-8)] tw:text-[var(--font-size-meta)] tw:font-[var(--font-weight-medium)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)] tw:cursor-pointer hover:tw:bg-[var(--color-black-hover-5)] tw:max-md:min-h-[var(--touch-target)]"
+        [attr.aria-pressed]="statusTab() === tab.id"
+        [class.tw:!bg-[var(--color-azure-46)]]="statusTab() === tab.id"
+        [class.tw:!text-[var(--color-white-solid)]]="statusTab() === tab.id"
+        (click)="statusTabChange.emit(tab.id)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <div
+    class="tw:flex tw:items-center tw:justify-end tw:gap-[var(--space-8)] tw:max-md:flex-wrap tw:max-md:justify-start"
+  >
+    @if (canClear()) {
+      <button
+        type="button"
+        class="tw:h-[var(--size-filter-control-height)] tw:border-0 tw:bg-transparent tw:px-[var(--space-8)] tw:text-[var(--font-size-meta)] tw:text-[var(--color-grey-46)] tw:cursor-pointer hover:tw:text-[var(--color-grey-13)] tw:max-md:min-h-[var(--touch-target)]"
+        (click)="clear.emit()"
+      >
+        Clear filters
+      </button>
+    }
+
+    <label>
+      <span class="visually-hidden">Priority</span>
+      <select
+        class="tw:h-[var(--size-filter-control-height)] tw:min-w-[88px] tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:py-0 tw:pl-3 tw:pr-[9px] tw:text-[var(--font-size-search)] tw:text-[var(--color-grey-13)] tw:outline-none focus-visible:tw:border-[var(--color-azure-46)] tw:max-md:min-h-[var(--touch-target)]"
+        [value]="priority() ?? ''"
+        (change)="onPriorityChange($event)"
+      >
+        <option value="">Priority</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    </label>
+
+    <label>
+      <span class="visually-hidden">Assignee</span>
+      <select
+        class="tw:h-[var(--size-filter-control-height)] tw:min-w-[88px] tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:py-0 tw:pl-3 tw:pr-[9px] tw:text-[var(--font-size-search)] tw:text-[var(--color-grey-13)] tw:outline-none focus-visible:tw:border-[var(--color-azure-46)] tw:max-md:min-h-[var(--touch-target)]"
+        [value]="assigneeId() ?? ''"
+        (change)="onAssigneeChange($event)"
+      >
+        <option value="">Assignee</option>
+        @for (assignee of assignees(); track assignee.id) {
+          <option [value]="assignee.id">{{ assignee.name }}</option>
+        }
+      </select>
+    </label>
+
+    <button
+      type="button"
+      class="tw:inline-flex tw:h-[var(--size-filter-tab-height)] tw:min-w-[var(--size-new-task-width)] tw:items-center tw:justify-center tw:gap-[var(--space-4)] tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-[var(--color-azure-46)] tw:px-[var(--space-16)] tw:text-[var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)] tw:cursor-pointer tw:max-md:min-h-[var(--touch-target)]"
+      (click)="create.emit()"
+    >
+      <app-add-icon width="14" height="14" iconClass="" />
+      New Task
+    </button>
+  </div>
+</div>

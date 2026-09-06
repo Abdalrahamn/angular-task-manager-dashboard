@@ -1,0 +1,72 @@
+<section class="tw:flex tw:flex-col tw:gap-[var(--space-24)]">
+  <h1 class="visually-hidden">Dashboard</h1>
+
+  @if (store.statisticsLoading() && store.statistics().length === 0) {
+    <div
+      class="tw:grid tw:grid-cols-1 tw:gap-[var(--space-24)] tw:md:grid-cols-2 tw:lg:grid-cols-4"
+    >
+      @for (item of [1, 2, 3, 4]; track item) {
+        <app-skeleton variant="stat-card" />
+      }
+    </div>
+  } @else {
+    <div
+      class="tw:grid tw:grid-cols-1 tw:gap-[var(--space-24)] tw:md:grid-cols-2 tw:lg:grid-cols-4"
+    >
+      @for (statistic of store.currentStatistics(); track statistic.id) {
+        <app-stat-card [statistic]="statistic" />
+      }
+    </div>
+  }
+
+  <app-filter-bar
+    [statusTab]="store.statusTab()"
+    [priority]="store.priority()"
+    [assigneeId]="store.assigneeId()"
+    [assignees]="store.uniqueAssignees()"
+    [canClear]="store.hasActiveFilters()"
+    (statusTabChange)="store.setStatusTab($event)"
+    (priorityChange)="store.setPriority($event)"
+    (assigneeIdChange)="store.setAssigneeId($event)"
+    (clear)="store.clearFilters()"
+    (create)="openCreate()"
+  />
+
+  @if (store.tasksError()) {
+    <app-error-state
+      title="Couldn't load tasks"
+      message="The task list failed. Retry to load it again."
+      (retry)="store.retryReads()"
+    />
+  } @else if (store.tasksLoading() && store.tasks().length === 0) {
+    <div
+      class="tw:grid tw:grid-cols-3 tw:items-start tw:gap-[var(--space-24)] tw:max-lg:grid-cols-[repeat(3,minmax(320px,1fr))] tw:max-lg:overflow-x-auto"
+    >
+      @for (column of [1, 2, 3]; track column) {
+        <div
+          class="tw:flex tw:flex-col tw:gap-[var(--space-16)] tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
+        >
+          @for (card of [1, 2]; track card) {
+            <app-skeleton variant="task-card" />
+          }
+        </div>
+      }
+    </div>
+  } @else if (store.tasks().length === 0) {
+    <app-empty-state title="No tasks yet" message="Create a task to populate the board." />
+  } @else if (store.hasActiveFilters() && store.filteredTasks().length === 0) {
+    <app-empty-state
+      title="No matching tasks"
+      message="No tasks match your search or filters. Try clearing them to see the full board."
+    />
+  } @else {
+    <app-kanban-board
+      [columns]="store.groupedColumns()"
+      [dragDisabled]="store.submitting()"
+      (editTask)="openEdit($event)"
+      (deleteTask)="openDelete($event)"
+      (moveTask)="moveTask($event)"
+      (dropped)="store.dropTask($event)"
+    />
+  }
+</section>
