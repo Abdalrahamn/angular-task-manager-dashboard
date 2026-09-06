@@ -16,6 +16,39 @@ Open `http://localhost:4200`. To run each process separately, use `npm run start
 
 `data-fetching/generate-data.js` is the supplied generator. `data-fetching/prepare-db.js` converts its task and statistics output into the json-server `db.json` shape. json-server exposes `/tasks` and `/statistics`.
 
+### Environment configuration
+
+The local API base URL is configured in `src/environments/environment.ts` and defaults to `http://localhost:3000`. Keep it aligned with the port passed to `start:api` if the backend port changes. This assignment currently has one environment file; there are no secrets or external service credentials to configure.
+
+## Implemented features
+
+- Dashboard statistics derived from the current tasks, search across title and description, status tabs, priority and assignee filters, and clear-filter feedback.
+- Kanban columns with same-column reordering and cross-column status changes through drag and drop or the accessible task action menu.
+- Create and edit dialogs, delete confirmation, dynamic tags, loading skeletons, empty states, retryable read errors, and mutation notifications.
+- Analytics for completion rate, overdue rate, status, priority, and tasks per assignee. Chart.js is deferred until the analytics content is rendered.
+- Team summaries derived from task assignees, including assigned, in-progress, and completed counts.
+- Responsive desktop/mobile navigation. `/calendar` and `/settings` are intentional placeholder routes, while `/tasks` provides a focused create-task entry point and directs users to the dashboard board.
+
+## Data and API contract
+
+json-server returns arrays directly rather than the wrapped `TasksResponse` and `StatisticsResponse` examples in `DATA_README.md`:
+
+- `GET /tasks` returns `Task[]`; `POST /tasks`, `PUT /tasks/:id`, `PATCH /tasks/:id`, and `DELETE /tasks/:id` provide CRUD operations.
+- `GET /statistics` returns `Statistic[]`. It supplies card metadata and historical change labels; live metric values are calculated from `/tasks`.
+
+A task contains the following fields:
+
+- `id`, `title`, and `description`: strings.
+- `status`: `todo`, `in_progress`, or `done`.
+- `priority`: `low`, `medium`, or `high`.
+- `dueDate`, `createdAt`, and `updatedAt`: date/ISO date strings.
+- `completedAt`: an ISO date string or `null`; it is set when a task moves to Done and cleared when it leaves Done.
+- `isOverdue`: an optional derived boolean for an open task whose due date has passed.
+- `assignee`: an object containing `id`, `name`, `avatar`, and `email`.
+- `tags`: a string array.
+
+The task form requires non-whitespace title and description values, a priority, status, due date, and an assignee. New tasks cannot use a past due date; an existing overdue task can still be edited. Tags are dynamic and optional after blank values are trimmed out.
+
 ## Commands
 
 | Command                           | What it does                                              |
@@ -70,11 +103,32 @@ The testing pyramid is intentionally small at the browser layer: colocated unit/
 
 GitHub Actions (`.github/workflows/ci.yml`) runs on pushes and pull requests targeting `main`: clean install, formatting, linting, coverage tests, production build, and Chromium smoke tests.
 
-## Known trade-offs
+### Error and failure behavior
+
+- A failed GET is retried once. If it still fails, the affected task, team, or analytics view shows an inline error state with a Retry action.
+- Writes are not retried automatically, which avoids duplicate mutations. Create/edit, delete, and status failures show a user notification and leave the dialog or UI available for another attempt.
+- Cross-column moves are optimistic; a failed status PATCH rolls the task back and refreshes server state.
+- The mutation service prevents concurrent task writes while one request is pending.
+
+### Last verified quality status
+
+Verified locally on 2026-09-07 with Node.js 22:
+
+- `npm test`: 40 test files and 139 tests passed; 100% statements, branches, functions, and lines.
+- `npm run lint`: passed with no lint errors.
+- `npm run build`: production build passed; the initial bundle was 634.18 kB and remained within the configured 650 kB warning and 1 MB error budgets.
+- `npm run test:e2e`: all applicable browser journeys passed. The desktop project runs the CRUD journey, and the mobile project runs the responsive-navigation journey; each project deliberately ignores the other project's non-applicable journey.
+
+No unit-test, browser-test, lint, or production-build failures were present at the time of this review.
+
+## Known limitations and future improvements
 
 - json-server has no task ranking field, so same-column drag order is intentionally session-local.
 - `/statistics` is source data rather than an endpoint updated by task CRUD; current dashboard metrics are therefore derived from `/tasks`.
 - The assignment has no tablet/mobile Figma frames; those layouts extend the supplied desktop visual language.
+- Calendar and Settings are placeholders, and users are derived from task data rather than managed through a dedicated `/users` endpoint.
+- Authentication, authorization, server-side validation, pagination, and multi-user synchronization are outside the mock-backend scope.
+- Natural next steps are persisting a rank field, adding dedicated user/calendar/settings APIs, adding an Angular production environment file, and running accessibility and Lighthouse audits in CI.
 
 ## Submission notes
 
