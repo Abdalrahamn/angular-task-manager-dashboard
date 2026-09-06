@@ -44,7 +44,7 @@
 .stat-card__change {
   margin: 4px 0 0;
   display: inline-flex;
-  gap: 2px;
+  gap: var(--space-4);
   font-size: var(--font-size-meta);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-192);
