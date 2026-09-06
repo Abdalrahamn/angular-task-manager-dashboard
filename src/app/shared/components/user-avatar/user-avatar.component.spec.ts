@@ -21,8 +21,8 @@ describe('UserAvatar', () => {
     fixture.componentRef.setInput('size', 'md');
     fixture.detectChanges();
     expect(avatar.classList.contains('!tw:size-[var(--size-header-control)]')).toBe(true);
-    expect(
-      avatar.classList.contains('!tw:text-[length:var(--font-size-avatar-initials)]'),
-    ).toBe(true);
+    expect(avatar.classList.contains('!tw:text-[length:var(--font-size-avatar-initials)]')).toBe(
+      true,
+    );
   });
 });
