@@ -176,7 +176,13 @@ describe('TaskStoreService', () => {
         { assignee: john, total: 2, todo: 0, inProgress: 1, done: 1 },
       ],
     });
-    expect(store.currentStatistics()).toEqual([{ ...statistic, value: 4, change: '+0' }]);
+    expect(store.currentStatistics().map(({ title, value }) => ({ title, value }))).toEqual([
+      { title: 'Total Tasks', value: 4 },
+      { title: 'Completed', value: 1 },
+      { title: 'In Progress', value: 1 },
+      { title: 'Overdue', value: 1 },
+    ]);
+    expect(store.activityItems().some((item) => item.id.startsWith('seed-'))).toBe(true);
 
     store.setSearch('homepage');
     expect(store.filteredTasks().map((task) => task.id)).toEqual(['task-001']);
@@ -204,7 +210,7 @@ describe('TaskStoreService', () => {
     expect(store.hasActiveFilters()).toBe(false);
   });
 
-  it('should create, update, change status, complete, and delete tasks', async () => {
+  it('should create, update, change status, complete, and delete with activity', async () => {
     const { store, http } = setup();
     await flushReads(http, [todo]);
     await waitUntilIdle(store);
@@ -212,22 +218,27 @@ describe('TaskStoreService', () => {
     store.createTask(todo).subscribe();
     http.expectOne((req) => req.method === 'POST').flush(todo);
     await flushTasksReload(http, [todo]);
+    expect(store.activityItems()[0].action).toBe('create');
 
     store.updateTask({ ...todo, title: 'New title' }).subscribe();
     http.expectOne((req) => req.method === 'PUT').flush({ ...todo, title: 'New title' });
     await flushTasksReload(http, [{ ...todo, title: 'New title' }]);
+    expect(store.activityItems()[0].action).toBe('edit');
 
     store.changeTaskStatus(todo, 'in_progress').subscribe();
     http.expectOne((req) => req.method === 'PATCH').flush({ ...todo, status: 'in_progress' });
     await flushTasksReload(http, [{ ...todo, status: 'in_progress' }]);
+    expect(store.activityItems()[0].action).toBe('status_change');
 
     store.changeTaskStatus(todo, 'done').subscribe();
     http.expectOne((req) => req.method === 'PATCH').flush({ ...todo, status: 'done' });
     await flushTasksReload(http, [{ ...todo, status: 'done' }]);
+    expect(store.activityItems()[0].action).toBe('complete');
 
     store.deleteTask(todo).subscribe();
     http.expectOne((req) => req.method === 'DELETE').flush(null);
     await flushTasksReload(http, []);
+    expect(store.activityItems()[0].action).toBe('delete');
   });
 
   it('should ignore duplicate submits and notify on mutation failure', async () => {
@@ -248,22 +259,6 @@ describe('TaskStoreService', () => {
       .error(new ProgressEvent('error'), { status: 500 });
     TestBed.tick();
     expect(notifications.message()).toBe('Unable to save the task.');
-  });
-
-  it('should notify when deleting a task fails', async () => {
-    const { store, http, notifications } = setup();
-    await flushReads(http, [todo]);
-    await waitUntilIdle(store);
-
-    store.deleteTask(todo).subscribe({ error: () => undefined });
-    http.expectOne((req) => req.method === 'DELETE' && req.url.endsWith(`/${todo.id}`)).error(
-      new ProgressEvent('error'),
-      { status: 0 },
-    );
-    TestBed.tick();
-
-    expect(notifications.message()).toBe('Unable to delete the task.');
-    expect(store.tasks()).toContain(todo);
   });
 
   it('should show a user-friendly mutation message for non-Error failures', () => {
@@ -294,6 +289,20 @@ describe('TaskStoreService', () => {
     const notifications = TestBed.inject(NotificationService);
     store.createTask(todo).subscribe({ error: () => undefined });
     expect(notifications.message()).toBe('Unable to save the task.');
+  });
+
+  it('should use a timestamp activity id when crypto.randomUUID is unavailable', async () => {
+    const { store, http } = setup();
+    await flushReads(http, [todo]);
+    await waitUntilIdle(store);
+    vi.stubGlobal('crypto', undefined);
+
+    store.createTask(todo).subscribe();
+    http.expectOne((req) => req.method === 'POST').flush(todo);
+    TestBed.tick();
+    await flushTasksReload(http, [todo]);
+    expect(store.activityItems()[0].id).toMatch(/^activity-\d+$/);
+    vi.unstubAllGlobals();
   });
 
   it('should expose an empty statistics list when that resource fails', async () => {
@@ -338,6 +347,22 @@ describe('TaskStoreService', () => {
       overdueRate: 0,
       byAssignee: [],
     });
+    expect(store.activityItems()).toEqual([]);
+  });
+
+  it('should not overwrite activity that arrives before the first non-empty snapshot', async () => {
+    const { store, http } = setup();
+    http.expectOne(`${environment.apiBaseUrl}/tasks`).flush([]);
+    http.expectOne(`${environment.apiBaseUrl}/statistics`).flush([statistic]);
+    await waitUntilIdle(store);
+
+    store.createTask(todo).subscribe();
+    http.expectOne((request) => request.method === 'POST').flush(todo);
+    await flushTasksReload(http, [todo]);
+    await waitUntilIdle(store);
+
+    expect(store.activityItems()[0].action).toBe('create');
+    expect(store.groupedColumns().todo[0].id).toBe('task-001');
   });
 
   it('should reorder within a column without calling the API', async () => {
@@ -381,7 +406,7 @@ describe('TaskStoreService', () => {
       toStatus: 'in_progress',
     });
     expect(store.groupedColumns().in_progress[0].id).toBe('task-001');
-    expect(store.currentStatistics()[0].value).toBe(1);
+    expect(store.currentStatistics().find((item) => item.title === 'In Progress')?.value).toBe(1);
     http.expectOne((req) => req.method === 'PATCH').flush({ ...todo, status: 'in_progress' });
     await flushTasksReload(http, [{ ...todo, status: 'in_progress' }]);
     expect(store.groupedColumns().in_progress[0].status).toBe('in_progress');

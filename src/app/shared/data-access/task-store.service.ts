@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TaskDropEvent } from '../models/kanban.model';
 import { StatusTab } from '../models/task-filter.model';
 import { Task, TaskPriority } from '../models/task.model';
+import { TaskActivityStore } from './task-activity.store';
 import { TaskBoardStore } from './task-board.store';
 import { TaskFilterStore } from './task-filter.store';
 import { TaskMutationService } from './task-mutation.service';
@@ -16,13 +17,14 @@ import {
 
 /**
  * Stable task-domain façade for components.
- * Focused stores own filters, board state, and mutation lifecycle.
+ * Focused stores own filters, board state, activity, and mutation lifecycle.
  */
 @Injectable({ providedIn: 'root' })
 export class TaskStoreService {
   private readonly tasksApi = inject(TaskService);
   private readonly filters = inject(TaskFilterStore);
   private readonly board = inject(TaskBoardStore);
+  private readonly activity = inject(TaskActivityStore);
   private readonly mutations = inject(TaskMutationService);
 
   readonly search = this.filters.search;
@@ -30,6 +32,7 @@ export class TaskStoreService {
   readonly priority = this.filters.priority;
   readonly assigneeId = this.filters.assigneeId;
   readonly hasActiveFilters = this.filters.hasActiveFilters;
+  readonly activityItems = this.activity.items;
   readonly submitting = this.mutations.submitting;
 
   readonly tasks = computed(() =>
@@ -47,14 +50,17 @@ export class TaskStoreService {
   readonly filteredTasks = computed(() => filterTasks(this.tasks(), this.filters.snapshot()));
   readonly groupedColumns = computed(() => this.board.group(this.filteredTasks()));
   readonly currentStatistics = computed(() =>
-    buildCurrentStatistics(this.board.applyOverrides(this.tasks()), this.statistics()),
+    buildCurrentStatistics(this.board.applyOverrides(this.tasks())),
   );
   readonly analyticsSeries = computed(() => buildAnalytics(this.tasks()));
 
   constructor() {
     effect(() => {
-      const tasks = this.tasksError() ? [] : this.tasks();
+      const loading = this.tasksLoading();
+      const error = this.tasksError();
+      const tasks = error ? [] : this.tasks();
       untracked(() => {
+        this.activity.seed(tasks, loading, error);
         this.board.sync(tasks);
       });
     });

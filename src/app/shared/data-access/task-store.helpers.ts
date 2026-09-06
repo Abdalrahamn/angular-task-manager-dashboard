@@ -1,3 +1,4 @@
+import { ActivityItem } from '../models/activity.model';
 import { AnalyticsSeries, AssigneeWorkload } from '../models/analytics.model';
 import { TaskColumns } from '../models/kanban.model';
 import { Statistic } from '../models/statistic.model';
@@ -65,68 +66,69 @@ export function applyStatusOverrides(tasks: Task[], overrides: TaskStatusOverrid
   });
 }
 
-export function buildCurrentStatistics(
-  tasks: Task[],
-  statistics: Statistic[],
-  now = new Date(),
-): Statistic[] {
-  const values: Record<Statistic['title'], number> = {
-    'Total Tasks': tasks.length,
-    Completed: tasks.filter((task) => task.status === 'done').length,
-    'In Progress': tasks.filter((task) => task.status === 'in_progress').length,
-    Overdue: tasks.filter(isTaskOverdue).length,
-  };
+export function buildCurrentStatistics(tasks: Task[], now = new Date()): Statistic[] {
+  const completed = tasks.filter((task) => task.status === 'done').length;
+  const inProgress = tasks.filter((task) => task.status === 'in_progress').length;
+  const overdue = tasks.filter(isTaskOverdue).length;
   const today = startOfDay(now);
   const tomorrow = addDays(today, 1);
-  const weekStart = addDays(today, -((today.getDay() + 6) % 7));
-  const yesterdayKey = dateKey(addDays(today, -1));
-  const changes: Record<Statistic['title'], number> = {
-    'Total Tasks': tasks.filter((task) => isWithin(task.createdAt, weekStart, tomorrow)).length,
-    Completed: tasks.filter(
-      (task) => task.completedAt && isWithin(task.completedAt, today, tomorrow),
-    ).length,
-    'In Progress': tasks.filter(
-      (task) => task.status === 'in_progress' && isWithin(task.updatedAt, today, tomorrow),
-    ).length,
-    Overdue: tasks.filter((task) => isTaskOverdue(task) && task.dueDate === yesterdayKey).length,
-  };
+  const yesterday = addDays(today, -1);
+  const startOfWeek = addDays(today, -((today.getDay() + 6) % 7));
+  const createdThisWeek = tasks.filter((task) =>
+    isWithin(task.createdAt, startOfWeek, tomorrow),
+  ).length;
+  const completedToday = tasks.filter(
+    (task) => task.completedAt && isWithin(task.completedAt, today, tomorrow),
+  ).length;
+  const progressToday = tasks.filter(
+    (task) => task.status === 'in_progress' && isWithin(task.updatedAt, today, tomorrow),
+  ).length;
+  const overdueToday = tasks.filter(
+    (task) => isTaskOverdue(task) && isWithin(task.dueDate, yesterday, today),
+  ).length;
 
-  return statistics.map((statistic) => {
-    const change = changes[statistic.title];
-    const unchangedProgress = statistic.title === 'In Progress' && change === 0;
-
-    return {
-      ...statistic,
-      value: values[statistic.title],
-      change: unchangedProgress ? '0' : `+${change}`,
-      changeLabel: unchangedProgress ? 'Same as yesterday' : statistic.changeLabel,
-      changeType: unchangedProgress ? 'neutral' : statistic.changeType,
-    };
-  });
-}
-
-function startOfDay(value: Date): Date {
-  const result = new Date(value);
-  result.setHours(0, 0, 0, 0);
-  return result;
-}
-
-function addDays(value: Date, days: number): Date {
-  const result = new Date(value);
-  result.setDate(result.getDate() + days);
-  return result;
-}
-
-function dateKey(value: Date): string {
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, '0');
-  const day = String(value.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function isWithin(value: string, start: Date, end: Date): boolean {
-  const timestamp = Date.parse(value);
-  return timestamp >= start.getTime() && timestamp < end.getTime();
+  return [
+    currentStatistic(
+      'current-total',
+      'Total Tasks',
+      '📊',
+      tasks.length,
+      '#1976D2',
+      createdThisWeek,
+      'this week',
+      'positive',
+    ),
+    currentStatistic(
+      'current-completed',
+      'Completed',
+      '✅',
+      completed,
+      '#388E3C',
+      completedToday,
+      'today',
+      'positive',
+    ),
+    currentStatistic(
+      'current-progress',
+      'In Progress',
+      '🔄',
+      inProgress,
+      '#F57C00',
+      progressToday === 0 ? null : progressToday,
+      progressToday === 0 ? 'Same as yesterday' : 'today',
+      progressToday === 0 ? 'neutral' : 'positive',
+    ),
+    currentStatistic(
+      'current-overdue',
+      'Overdue',
+      '⚠️',
+      overdue,
+      '#D32F2F',
+      overdueToday,
+      'today',
+      'negative',
+    ),
+  ];
 }
 
 export function buildAnalytics(tasks: Task[]): AnalyticsSeries {
@@ -168,8 +170,60 @@ export function taskOrderFromColumns(columns: TaskColumns): string[] {
   return [...columns.todo, ...columns.in_progress, ...columns.done].map((task) => task.id);
 }
 
+export function seedActivityItems(tasks: Task[]): ActivityItem[] {
+  return [...tasks]
+    .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))
+    .slice(0, 8)
+    .map((task) => ({
+      id: `seed-${task.id}`,
+      action: task.status === 'done' || task.completedAt ? 'complete' : 'edit',
+      taskId: task.id,
+      title: task.title,
+      at: task.completedAt ?? task.updatedAt,
+    }));
+}
+
 export function emptyTaskColumns(): TaskColumns {
   return { todo: [], in_progress: [], done: [] };
+}
+
+function currentStatistic(
+  id: string,
+  title: Statistic['title'],
+  icon: string,
+  value: number,
+  color: string,
+  change: number | null,
+  changeLabel: string,
+  changeType: Statistic['changeType'],
+): Statistic {
+  return {
+    id,
+    title,
+    icon,
+    value,
+    change: change === null ? '' : `+${change}`,
+    changeLabel,
+    changeType,
+    color,
+  };
+}
+
+function startOfDay(value: Date): Date {
+  const result = new Date(value);
+  result.setHours(0, 0, 0, 0);
+  return result;
+}
+
+function addDays(value: Date, days: number): Date {
+  const result = new Date(value);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function isWithin(value: string, start: Date, end: Date): boolean {
+  const timestamp = Date.parse(value);
+  return timestamp >= start.getTime() && timestamp < end.getTime();
 }
 
 function updateWorkload(workload: Map<string, AssigneeWorkload>, task: Task): void {

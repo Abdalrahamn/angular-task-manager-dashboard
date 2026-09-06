@@ -8,6 +8,7 @@ import {
   filterTasks,
   groupTasks,
   mergeTaskOrder,
+  seedActivityItems,
   taskOrderFromColumns,
 } from './task-store.helpers';
 
@@ -97,8 +98,12 @@ describe('task store helpers', () => {
     expect(tasks[1]).toBe(done);
   });
 
-  it('builds analytics', () => {
+  it('builds current statistics and analytics', () => {
     const tasks = [todo, inProgress, done];
+
+    expect(
+      buildCurrentStatistics(tasks, new Date('2026-01-03T12:00:00')).map(({ value }) => value),
+    ).toEqual([3, 1, 1, 1]);
     expect(buildAnalytics(tasks)).toEqual({
       byStatus: { todo: 1, in_progress: 1, done: 1 },
       byPriority: { low: 1, medium: 1, high: 1 },
@@ -116,82 +121,47 @@ describe('task store helpers', () => {
     expect(buildAnalytics([]).overdueRate).toBe(0);
   });
 
-  it('uses current task counts while preserving statistics data', () => {
-    const source: import('../models/statistic.model').Statistic[] = [
-      {
-        id: 'stat-total',
-        title: 'Total Tasks',
-        icon: '📊',
-        value: 156,
-        change: '+12',
-        changeLabel: 'this week',
-        changeType: 'positive',
-        color: '#1976D2',
-      },
-      {
-        id: 'stat-completed',
-        title: 'Completed',
-        icon: '✅',
-        value: 89,
-        change: '+8',
-        changeLabel: 'today',
-        changeType: 'positive',
-        color: '#388E3C',
-      },
-      {
-        id: 'stat-progress',
-        title: 'In Progress',
-        icon: '🔄',
-        value: 42,
-        change: '0',
-        changeLabel: 'Same as yesterday',
-        changeType: 'neutral',
-        color: '#FF6F00',
-      },
-      {
-        id: 'stat-overdue',
-        title: 'Overdue',
-        icon: '⚠️',
-        value: 25,
-        change: '+3',
-        changeLabel: 'today',
-        changeType: 'negative',
-        color: '#D32F2F',
-      },
-    ];
-
-    const result = buildCurrentStatistics(
+  it('derives change text from task dates instead of fixed statistics', () => {
+    const today = new Date('2026-01-07T12:00:00');
+    const statistics = buildCurrentStatistics(
       [
         { ...todo, createdAt: '2026-01-05T10:00:00' },
-        { ...inProgress, updatedAt: '2026-01-07T09:00:00' },
+        {
+          ...inProgress,
+          createdAt: '2025-12-01T10:00:00',
+          updatedAt: '2026-01-07T09:00:00',
+        },
         { ...done, completedAt: '2026-01-07T08:00:00' },
+        { ...todo, id: 'new-overdue', dueDate: '2026-01-06' },
       ],
-      source,
-      new Date('2026-01-07T12:00:00'),
+      today,
     );
 
-    expect(result.map(({ value }) => value)).toEqual([3, 1, 1, 1]);
-    expect(result.map(({ change }) => change)).toEqual(['+1', '+1', '+1', '+0']);
-    expect(result[0]).not.toBe(source[0]);
+    expect(statistics[0]).toMatchObject({
+      value: 4,
+      change: '+1',
+      changeLabel: 'this week',
+      changeType: 'positive',
+    });
+    expect(statistics[1]).toMatchObject({ change: '+1', changeLabel: 'today' });
+    expect(statistics[2]).toMatchObject({
+      value: 1,
+      change: '+1',
+      changeLabel: 'today',
+      changeType: 'positive',
+    });
+    expect(statistics[3]).toMatchObject({ change: '+1', changeLabel: 'today' });
   });
 
-  it('keeps unchanged progress neutral', () => {
-    const source: import('../models/statistic.model').Statistic[] = [
-      {
-        id: 'stat-progress',
-        title: 'In Progress',
-        icon: '🔄',
-        value: 42,
-        change: '+9',
-        changeLabel: 'today',
-        changeType: 'positive',
-        color: '#FF6F00',
-      },
-    ];
+  it('shows the neutral progress copy when no in-progress task changed today', () => {
+    const statistics = buildCurrentStatistics([inProgress], new Date('2026-01-07T12:00:00'));
 
-    expect(
-      buildCurrentStatistics([inProgress], source, new Date('2026-01-07T12:00:00'))[0],
-    ).toMatchObject({ change: '0', changeLabel: 'Same as yesterday', changeType: 'neutral' });
+    expect(statistics[2]).toMatchObject({
+      change: '',
+      changeLabel: 'Same as yesterday',
+      changeType: 'neutral',
+    });
+    expect(statistics[3]).toMatchObject({ change: '+0', changeLabel: 'today' });
   });
 
   it('merges and flattens board order', () => {
@@ -205,4 +175,36 @@ describe('task store helpers', () => {
     expect(emptyTaskColumns()).toEqual({ todo: [], in_progress: [], done: [] });
   });
 
+  it('seeds at most eight newest activity items with completion timestamps', () => {
+    const completedWithoutStatus: Task = {
+      ...todo,
+      id: 'task-004',
+      completedAt: '2026-01-04T00:00:00.000Z',
+      updatedAt: '2026-01-04T00:00:00.000Z',
+    };
+    const olderTasks = Array.from({ length: 6 }, (_, index) => ({
+      ...todo,
+      id: `old-${index}`,
+      updatedAt: `2025-01-0${index + 1}T00:00:00.000Z`,
+    }));
+    const activity = seedActivityItems([
+      todo,
+      inProgress,
+      done,
+      completedWithoutStatus,
+      ...olderTasks,
+    ]);
+
+    expect(activity).toHaveLength(8);
+    expect(activity[0]).toMatchObject({
+      id: 'seed-task-004',
+      action: 'complete',
+      at: completedWithoutStatus.completedAt,
+    });
+    expect(activity.find((item) => item.taskId === done.id)?.action).toBe('complete');
+    expect(activity.find((item) => item.taskId === inProgress.id)).toMatchObject({
+      action: 'edit',
+      at: inProgress.updatedAt,
+    });
+  });
 });
