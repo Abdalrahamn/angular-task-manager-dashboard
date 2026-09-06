@@ -1,5 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const reuseExistingServer = !process.env.CI;
+const appCommand = process.env.CI
+  ? 'node e2e/serve-built-app.mjs'
+  : 'npm start -- --host 127.0.0.1 --port 4200';
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
@@ -12,10 +17,22 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
   ],
-  webServer: {
-    command: 'npm run start:all',
-    url: 'http://127.0.0.1:4200',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: 'npm run start:api -- --host 0.0.0.0',
+      url: 'http://127.0.0.1:3000',
+      reuseExistingServer,
+      timeout: 60_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+    },
+    {
+      command: appCommand,
+      url: 'http://127.0.0.1:4200',
+      reuseExistingServer,
+      timeout: 180_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+    },
+  ],
 });
