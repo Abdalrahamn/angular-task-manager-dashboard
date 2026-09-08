@@ -6,7 +6,7 @@
       class="tw:grid tw:grid-cols-1 tw:gap-[var(--space-24)] tw:md:grid-cols-2 tw:lg:grid-cols-4"
     >
       @for (item of [1, 2, 3, 4]; track item) {
-        <app-skeleton variant="stat-card" />
+        <app-skeleton class="tw:block tw:min-w-0" variant="stat-card" />
       }
     </div>
   } @else {
@@ -14,7 +14,7 @@
       class="tw:grid tw:grid-cols-1 tw:gap-[var(--space-24)] tw:md:grid-cols-2 tw:lg:grid-cols-4"
     >
       @for (statistic of store.currentStatistics(); track statistic.id) {
-        <app-stat-card [statistic]="statistic" />
+        <app-stat-card class="tw:block tw:min-w-0" [statistic]="statistic" />
       }
     </div>
   }
@@ -47,7 +47,7 @@
           class="tw:flex tw:flex-col tw:gap-[var(--space-16)] tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
         >
           @for (card of [1, 2]; track card) {
-            <app-skeleton variant="task-card" />
+            <app-skeleton class="tw:block tw:min-w-0" variant="task-card" />
           }
         </div>
       }

@@ -1,11 +1,27 @@
-<div class="dialog">
-  <h2 class="dialog__title">Delete task</h2>
-  <p class="dialog__copy">Delete “{{ data.task.title }}”? This cannot be undone.</p>
-  <div class="dialog__actions">
-    <button type="button" class="dialog__cancel" (click)="cancel()">Cancel</button>
+<div
+  class="tw:flex tw:min-w-[min(420px,100%)] tw:flex-col tw:gap-[var(--space-16)] tw:p-[var(--space-24)]"
+>
+  <h2
+    class="tw:m-0 tw:[font-size:var(--font-size-stat-icon)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-grey-13)]"
+  >
+    Delete task
+  </h2>
+  <p
+    class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+  >
+    Delete “{{ data.task.title }}”? This cannot be undone.
+  </p>
+  <div class="tw:flex tw:justify-end tw:gap-[var(--space-8)]">
     <button
       type="button"
-      class="dialog__confirm"
+      class="dialog__cancel tw:cursor-pointer tw:border-0 tw:bg-transparent tw:[font-size:var(--font-size-meta)] tw:text-[var(--color-grey-46)]"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="dialog__confirm tw:h-[var(--size-filter-tab-height)] tw:min-w-[88px] tw:cursor-pointer tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-[var(--color-red-51)] tw:[font-size:var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)] tw:disabled:cursor-not-allowed tw:disabled:opacity-60"
       [disabled]="store.submitting()"
       (click)="confirm()"
     >

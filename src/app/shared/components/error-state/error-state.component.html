@@ -3,18 +3,18 @@
   role="alert"
 >
   <p
-    class="tw:m-0 tw:text-[var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+    class="tw:m-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
   >
     {{ title() }}
   </p>
   <p
-    class="tw:m-0 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+    class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
   >
     {{ message() }}
   </p>
   <button
     type="button"
-    class="tw:min-h-[var(--size-filter-tab-height)] tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-azure-46)] tw:bg-[var(--color-white-solid)] tw:px-[var(--space-16)] tw:text-[var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-azure-46)] tw:cursor-pointer"
+    class="tw:min-h-[var(--size-filter-tab-height)] tw:cursor-pointer tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-azure-46)] tw:bg-[var(--color-white-solid)] tw:px-[var(--space-16)] tw:[font-size:var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-azure-46)]"
     (click)="retry.emit()"
   >
     Retry

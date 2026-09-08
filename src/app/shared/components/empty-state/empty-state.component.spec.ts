@@ -17,6 +17,6 @@ describe('EmptyState', () => {
     const fixture = TestBed.createComponent(EmptyState);
     fixture.componentRef.setInput('title', 'Empty');
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.empty__message')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('p')).toHaveLength(1);
   });
 });

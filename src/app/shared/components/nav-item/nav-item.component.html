@@ -1,9 +1,13 @@
 <a
-  class="nav-item"
+  class="tw:flex tw:w-[var(--size-nav-item-width)] tw:min-h-[var(--size-nav-item-height)] tw:items-center tw:gap-[var(--space-8)] tw:rounded-[var(--radius-4)] tw:px-4 tw:py-2 tw:[font-size:var(--font-size-nav)] tw:font-[var(--font-weight-medium)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)] tw:no-underline tw:transition-colors tw:duration-150 hover:tw:bg-[var(--color-black-hover-5)]"
   [routerLink]="path()"
-  routerLinkActive="nav-item--active"
+  routerLinkActive="tw:!bg-[var(--color-azure-46)] tw:!text-[var(--color-white-solid)] hover:tw:!bg-[var(--color-azure-46)]"
   [routerLinkActiveOptions]="{ exact: true }"
 >
-  <span class="nav-item__icon" aria-hidden="true">{{ icon() }}</span>
+  <span
+    class="nav-item__icon tw:inline-flex tw:size-[18px] tw:items-center tw:justify-center tw:overflow-clip tw:[font-size:8px] tw:leading-none"
+    aria-hidden="true"
+    >{{ icon() }}</span
+  >
   <span class="nav-item__label">{{ label() }}</span>
 </a>

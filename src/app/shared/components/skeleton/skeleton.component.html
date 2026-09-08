@@ -1,4 +1,8 @@
-<div class="skeleton" [attr.data-variant]="variant()" aria-hidden="true">
+<div
+  class="skeleton tw:flex tw:min-w-0 tw:w-full tw:flex-col tw:gap-[var(--space-8)]"
+  [attr.data-variant]="variant()"
+  aria-hidden="true"
+>
   @if (variant() === 'stat-card') {
     <span class="skeleton__block skeleton__block--title"></span>
     <span class="skeleton__block skeleton__block--value"></span>

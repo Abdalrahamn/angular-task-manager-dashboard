@@ -1,19 +1,31 @@
-<article class="stat-card">
-  <div class="stat-card__title-row">
-    <span class="stat-card__icon" aria-hidden="true" [style.color]="statistic().color">{{
-      statistic().icon
-    }}</span>
-    <h2 class="stat-card__title">
+<article
+  class="tw:block tw:min-w-0 tw:min-h-[var(--size-stat-card-height)] tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:px-6 tw:py-[23px] tw:shadow-[var(--shadow-stat)] tw:lg:h-[var(--size-stat-card-height)]"
+>
+  <div class="tw:flex tw:min-h-6 tw:items-center tw:gap-[var(--space-8)]">
+    <span
+      class="stat-card__icon tw:inline-flex tw:size-4 tw:items-center tw:justify-center tw:[font-size:14px] tw:leading-none"
+      aria-hidden="true"
+      [style.color]="statistic().color"
+      >{{ statistic().icon }}</span
+    >
+    <h2
+      class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-medium)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+    >
       {{ statistic().title }}
     </h2>
   </div>
-  <p class="stat-card__value">
+  <p
+    class="tw:mt-[30px] tw:mb-0 tw:[font-size:var(--font-size-stat-value)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-512)] tw:text-[var(--color-grey-13)]"
+  >
     {{ statistic().value }}
   </p>
-  <p class="stat-card__change" [attr.data-type]="statistic().changeType">
+  <p
+    class="stat-card__change tw:mt-1 tw:mb-0 tw:inline-flex tw:gap-[var(--space-4)] tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-regular)] tw:leading-[var(--line-height-192)] data-[type=positive]:tw:text-[var(--color-green-39)] data-[type=negative]:tw:text-[var(--color-red-51)] data-[type=neutral]:tw:text-[var(--color-grey-46)]"
+    [attr.data-type]="statistic().changeType"
+  >
     @if (statistic().change !== '0') {
       <span>{{ statistic().change }}</span>
     }
-    <span class="stat-card__change-label">{{ statistic().changeLabel }}</span>
+    <span>{{ statistic().changeLabel }}</span>
   </p>
 </article>

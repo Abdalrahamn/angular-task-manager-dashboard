@@ -1,13 +1,22 @@
-<section class="column">
-  <header class="column__header">
-    <h2 class="column__title">
+<section
+  class="tw:flex tw:h-full tw:min-h-0 tw:flex-col tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
+>
+  <header
+    class="tw:flex tw:min-h-[33.19px] tw:items-center tw:justify-between tw:gap-[var(--space-8)] tw:border-b tw:border-[var(--color-grey-88)] tw:pb-[var(--space-8)]"
+  >
+    <h2
+      class="tw:m-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)] tw:uppercase"
+    >
       {{ title() }}
     </h2>
-    <span class="column__count">{{ tasks().length }}</span>
+    <span
+      class="column__count tw:inline-flex tw:h-[var(--size-count-badge-height)] tw:min-w-[var(--size-count-badge-width)] tw:items-center tw:justify-center tw:rounded-[var(--radius-4)] tw:bg-[var(--color-grey-97)] tw:px-[6px] tw:[font-size:var(--font-size-badge)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+      >{{ tasks().length }}</span
+    >
   </header>
 
   <div
-    class="column__list"
+    class="tw:flex tw:min-h-[120px] tw:flex-1 tw:flex-col tw:gap-[var(--space-16)] tw:pt-[var(--space-16)] tw:[&.cdk-drop-list-receiving]:outline tw:[&.cdk-drop-list-receiving]:outline-1 tw:[&.cdk-drop-list-receiving]:outline-dashed tw:[&.cdk-drop-list-receiving]:outline-[var(--color-azure-46)] tw:[&.cdk-drop-list-receiving]:outline-offset-4"
     cdkDropList
     [id]="status()"
     [cdkDropListData]="tasks()"
@@ -15,8 +24,14 @@
     (cdkDropListDropped)="onDrop($event)"
   >
     @for (task of tasks(); track task.id) {
-      <div class="column__item" cdkDrag [cdkDragData]="task" [cdkDragDisabled]="dragDisabled()">
+      <div
+        class="tw:cursor-grab tw:[&.cdk-drag-placeholder]:opacity-40"
+        cdkDrag
+        [cdkDragData]="task"
+        [cdkDragDisabled]="dragDisabled()"
+      >
         <app-task-card
+          class="tw:block tw:w-full"
           [task]="task"
           (edit)="editTask.emit($event)"
           (remove)="deleteTask.emit($event)"

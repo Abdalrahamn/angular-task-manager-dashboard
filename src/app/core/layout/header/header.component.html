@@ -16,7 +16,7 @@
     }
 
     <a
-      class="header__brand tw:inline-flex tw:h-[var(--size-logo-mark)] tw:items-center tw:gap-2"
+      class="header__brand tw:inline-flex tw:h-[var(--size-logo-mark)] tw:items-center tw:gap-2 tw:!text-[var(--color-azure-46)] visited:tw:!text-[var(--color-azure-46)]"
       routerLink="/dashboard"
     >
       <span
@@ -25,7 +25,7 @@
         >📋</span
       >
       <span
-        class="tw:whitespace-nowrap tw:text-[var(--font-size-logo)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-azure-46)]"
+        class="tw:whitespace-nowrap tw:[font-size:var(--font-size-logo)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-azure-46)]"
         >Task Manager</span
       >
     </a>
@@ -46,7 +46,7 @@
       autocomplete="off"
       [value]="search()"
       (input)="onSearchInput($event)"
-      class="tw:h-[var(--size-search-height)] tw:w-full tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:py-[9px] tw:pl-10 tw:pr-[17px] tw:text-[var(--font-size-search)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-13)] tw:outline-none placeholder:tw:text-[var(--color-grey-46)] focus-visible:tw:border-[var(--color-azure-46)]"
+      class="tw:h-[var(--size-search-height)] tw:w-full tw:rounded-[var(--radius-4)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:py-[9px] tw:pl-10 tw:pr-[17px] tw:[font-size:var(--font-size-search)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-13)] tw:outline-none placeholder:tw:text-[var(--color-grey-46)] focus-visible:tw:border-[var(--color-azure-46)]"
     />
   </label>
 
@@ -80,7 +80,7 @@
       }
     </div>
     <span
-      class="tw:inline-flex tw:size-[var(--size-header-control)] tw:items-center tw:justify-center tw:rounded-[var(--radius-20)] tw:bg-[var(--color-azure-46)] tw:text-[var(--font-size-avatar-initials)] tw:font-[var(--font-weight-bold)] tw:!text-[var(--color-white-solid)]"
+      class="tw:inline-flex tw:size-[var(--size-header-control)] tw:items-center tw:justify-center tw:rounded-[var(--radius-20)] tw:bg-[var(--color-azure-46)] tw:[font-size:var(--font-size-avatar-initials)] tw:font-[var(--font-weight-bold)] tw:!text-[var(--color-white-solid)]"
       aria-label="John Doe"
       >JD</span
     >

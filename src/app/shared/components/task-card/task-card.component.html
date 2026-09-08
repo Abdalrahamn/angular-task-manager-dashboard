@@ -1,17 +1,19 @@
 <article
-  class="task-card tw:flex tw:min-h-[var(--size-task-card-min-height)] tw:w-full tw:flex-col tw:rounded-[var(--radius-8)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
+  class="tw:flex tw:min-h-[var(--size-task-card-min-height)] tw:w-full tw:flex-col tw:rounded-[var(--radius-8)] tw:border tw:border-[var(--color-grey-88)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)]"
   [class.task-card--overdue]="overdue()"
   [class.task-card--todo]="task().status === 'todo' && !overdue()"
   [class.task-card--in-progress]="task().status === 'in_progress' && !overdue()"
   [class.task-card--completed]="completed()"
 >
   <div class="tw:flex tw:items-start tw:justify-between tw:gap-2">
-    <span class="task-card__priority" [attr.data-priority]="task().priority">{{
-      task().priority
-    }}</span>
+    <span
+      class="tw:rounded-[var(--radius-4)] tw:px-2 tw:py-1 tw:[font-size:var(--font-size-priority)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-16)] tw:tracking-[var(--letter-spacing-0)] tw:uppercase data-[priority=high]:tw:bg-[var(--color-grey-96)] data-[priority=high]:tw:text-[var(--color-red-51)] data-[priority=medium]:tw:bg-[var(--color-grey-94)] data-[priority=medium]:tw:text-[var(--color-orange-48)] data-[priority=low]:tw:bg-[var(--color-grey-94)] data-[priority=low]:tw:text-[var(--color-green-39)]"
+      [attr.data-priority]="task().priority"
+      >{{ task().priority }}</span
+    >
     <button
       type="button"
-      class="task-card__menu"
+      class="task-card__menu tw:mt-[-8px] tw:mr-[-8px] tw:inline-flex tw:cursor-pointer tw:items-center tw:justify-center tw:border-0 tw:bg-transparent tw:p-0 tw:text-[var(--color-grey-46)]"
       aria-label="Task actions"
       [matMenuTriggerFor]="actions"
     >
@@ -42,20 +44,40 @@
     </mat-menu>
   </div>
 
-  <h3 class="task-card__title">{{ task().title }}</h3>
-  <p class="task-card__description">{{ task().description }}</p>
+  <h3
+    class="task-card__title tw:mt-[var(--space-8)] tw:mb-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-medium)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)]"
+  >
+    {{ task().title }}
+  </h3>
+  <p
+    class="tw:mt-[var(--space-4)] tw:mb-0 tw:line-clamp-2 tw:overflow-hidden tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+  >
+    {{ task().description }}
+  </p>
 
-  <div class="task-card__status tw:flex tw:items-center tw:gap-1">
-    <span class="task-card__status-icon" aria-hidden="true">{{ statusIcon() }}</span>
+  <div
+    class="task-card__status tw:mt-[var(--space-8)] tw:flex tw:items-center tw:gap-1 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+  >
+    <span class="task-card__status-icon tw:[font-size:14px] tw:leading-none" aria-hidden="true">{{
+      statusIcon()
+    }}</span>
     <span>{{ status().label }}</span>
   </div>
 
   @if (category(); as categoryLabel) {
-    <span class="task-card__category">{{ categoryLabel }}</span>
+    <span
+      class="task-card__category tw:mt-[var(--space-8)] tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+      >{{ categoryLabel }}</span
+    >
   }
 
-  <footer class="task-card__footer tw:mt-auto tw:flex tw:items-center tw:gap-1">
+  <footer
+    class="tw:mt-auto tw:flex tw:items-center tw:gap-1 tw:border-t tw:border-[var(--color-grey-88)] tw:pt-[17px]"
+  >
     <app-user-avatar class="tw:flex-none" [assignee]="task().assignee" />
-    <span class="task-card__handle">{{ handle() }}</span>
+    <span
+      class="tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+      >{{ handle() }}</span
+    >
   </footer>
 </article>

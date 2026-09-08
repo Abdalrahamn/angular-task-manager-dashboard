@@ -1,8 +1,13 @@
-<div class="board-tabs" role="tablist" aria-label="Kanban status columns">
+<div
+  class="tw:hidden tw:max-md:flex tw:max-md:gap-[var(--space-4)] tw:max-md:overflow-x-auto tw:max-md:pb-[var(--space-8)]"
+  role="tablist"
+  aria-label="Kanban status columns"
+>
   <button
     id="kanban-tab-todo"
     type="button"
     role="tab"
+    [class]="tabButtonClass"
     [attr.aria-selected]="activeStatus() === 'todo'"
     aria-controls="kanban-panel-todo"
     [tabIndex]="activeStatus() === 'todo' ? 0 : -1"
@@ -15,6 +20,7 @@
     id="kanban-tab-in_progress"
     type="button"
     role="tab"
+    [class]="tabButtonClass"
     [attr.aria-selected]="activeStatus() === 'in_progress'"
     aria-controls="kanban-panel-in_progress"
     [tabIndex]="activeStatus() === 'in_progress' ? 0 : -1"
@@ -27,6 +33,7 @@
     id="kanban-tab-done"
     type="button"
     role="tab"
+    [class]="tabButtonClass"
     [attr.aria-selected]="activeStatus() === 'done'"
     aria-controls="kanban-panel-done"
     [tabIndex]="activeStatus() === 'done' ? 0 : -1"
@@ -37,12 +44,16 @@
   </button>
 </div>
 
-<div class="board" cdkDropListGroup>
+<div
+  class="tw:grid tw:grid-cols-3 tw:items-stretch tw:gap-[var(--space-24)] tw:max-lg:grid-cols-[repeat(3,minmax(320px,1fr))] tw:max-lg:overflow-x-auto tw:max-lg:snap-x tw:max-lg:snap-mandatory tw:max-lg:pb-[var(--space-8)] tw:max-md:block tw:max-md:overflow-visible tw:max-md:pb-0"
+  cdkDropListGroup
+>
   <app-kanban-column
     id="kanban-panel-todo"
     role="tabpanel"
     aria-labelledby="kanban-tab-todo"
-    [class.board__column--active]="activeStatus() === 'todo'"
+    class="tw:block tw:h-full tw:min-w-0 tw:max-lg:snap-start tw:max-md:hidden"
+    [class.tw:max-md:!block]="activeStatus() === 'todo'"
     title="To Do"
     status="todo"
     [tasks]="columns().todo"
@@ -56,7 +67,8 @@
     id="kanban-panel-in_progress"
     role="tabpanel"
     aria-labelledby="kanban-tab-in_progress"
-    [class.board__column--active]="activeStatus() === 'in_progress'"
+    class="tw:block tw:h-full tw:min-w-0 tw:max-lg:snap-start tw:max-md:hidden"
+    [class.tw:max-md:!block]="activeStatus() === 'in_progress'"
     title="In Progress"
     status="in_progress"
     [tasks]="columns().in_progress"
@@ -70,7 +82,8 @@
     id="kanban-panel-done"
     role="tabpanel"
     aria-labelledby="kanban-tab-done"
-    [class.board__column--active]="activeStatus() === 'done'"
+    class="tw:block tw:h-full tw:min-w-0 tw:max-lg:snap-start tw:max-md:hidden"
+    [class.tw:max-md:!block]="activeStatus() === 'done'"
     title="Done"
     status="done"
     [tasks]="columns().done"

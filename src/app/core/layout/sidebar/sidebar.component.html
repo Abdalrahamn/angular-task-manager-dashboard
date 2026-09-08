@@ -8,13 +8,13 @@
 >
   <nav class="tw:flex tw:w-[var(--size-nav-item-width)] tw:flex-col tw:gap-[var(--space-4)]">
     @for (item of navItems; track item.path) {
-      <app-nav-item [path]="item.path" [label]="item.label" [icon]="item.icon" />
+      <app-nav-item class="tw:block" [path]="item.path" [label]="item.label" [icon]="item.icon" />
     }
   </nav>
 
   <button
     type="button"
-    class="tw:mt-[var(--space-52)] tw:inline-flex tw:min-h-[var(--size-nav-item-height)] tw:w-[var(--size-nav-item-width)] tw:items-center tw:justify-center tw:gap-[var(--space-8)] tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-[var(--color-azure-46)] tw:text-[var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)] tw:cursor-pointer tw:max-lg:min-h-[var(--touch-target)]"
+    class="tw:mt-[var(--space-52)] tw:inline-flex tw:min-h-[var(--size-nav-item-height)] tw:w-[var(--size-nav-item-width)] tw:items-center tw:justify-center tw:gap-[var(--space-8)] tw:rounded-[var(--radius-4)] tw:border-0 tw:bg-[var(--color-azure-46)] tw:[font-size:var(--font-size-new-task)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)] tw:cursor-pointer tw:max-lg:min-h-[var(--touch-target)]"
     (click)="create.emit()"
   >
     <app-add-icon width="14" height="14" iconClass="" />

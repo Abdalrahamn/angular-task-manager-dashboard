@@ -19,6 +19,8 @@ export class KanbanBoard {
   readonly moveTask = output<TaskStatusChange>();
   readonly dropped = output<TaskDropEvent>();
   readonly activeStatus = signal<TaskStatus>('todo');
+  readonly tabButtonClass =
+    'tw:min-h-[var(--touch-target)] tw:cursor-pointer tw:whitespace-nowrap tw:border-0 tw:border-b-2 tw:border-solid tw:border-transparent tw:bg-transparent tw:px-[var(--space-16)] tw:[font:inherit] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-grey-46)] aria-selected:tw:[border-bottom-color:var(--color-azure-46)] aria-selected:tw:text-[var(--color-azure-46)] focus-visible:tw:!outline-2 focus-visible:tw:!outline-[var(--color-azure-46)] focus-visible:tw:![outline-offset:-2px]';
 
   selectStatus(status: TaskStatus): void {
     this.activeStatus.set(status);

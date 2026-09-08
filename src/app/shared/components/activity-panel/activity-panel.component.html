@@ -2,7 +2,7 @@
   class="tw:flex tw:w-[min(360px,calc(100vw-48px))] tw:max-h-[min(420px,70vh)] tw:flex-col tw:gap-[var(--space-8)] tw:overflow-auto tw:p-[var(--space-16)]"
 >
   <h2
-    class="tw:m-0 tw:text-[var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)]"
+    class="tw:m-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-224)] tw:text-[var(--color-grey-13)]"
   >
     Recent activity
   </h2>
@@ -14,7 +14,7 @@
     />
   } @else if (loading()) {
     <div aria-label="Loading recent activity">
-      <app-skeleton variant="task-card" />
+      <app-skeleton class="tw:block tw:min-w-0" variant="task-card" />
     </div>
   } @else if (items().length === 0) {
     <app-empty-state
@@ -28,12 +28,12 @@
           class="tw:border-b tw:border-[var(--color-grey-88)] tw:py-[var(--space-8)] last:tw:border-b-0"
         >
           <p
-            class="tw:m-0 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-13)]"
+            class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-13)]"
           >
             {{ description(item) }}
           </p>
           <time
-            class="tw:text-[var(--font-size-priority)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-46)]"
+            class="tw:[font-size:var(--font-size-priority)] tw:leading-[var(--line-height-16)] tw:text-[var(--color-grey-46)]"
             [attr.datetime]="item.at"
             >{{ item.at | date: 'MMM d, y, h:mm a' }}</time
           >

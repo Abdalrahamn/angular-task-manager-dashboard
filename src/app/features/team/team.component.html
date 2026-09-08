@@ -1,6 +1,14 @@
-<section class="page">
-  <h1>Team</h1>
-  <p class="page__lead">People are derived from task assignees. There is no users API.</p>
+<section class="tw:flex tw:flex-col tw:gap-[var(--space-24)]">
+  <h1
+    class="tw:m-0 tw:[font-size:var(--font-size-stat-icon)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-grey-13)]"
+  >
+    Team
+  </h1>
+  <p
+    class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-grey-46)]"
+  >
+    People are derived from task assignees. There is no users API.
+  </p>
 
   @if (store.tasksError()) {
     <app-error-state
@@ -9,9 +17,12 @@
       (retry)="store.retryReads()"
     />
   } @else if (store.tasksLoading()) {
-    <div class="page__grid" aria-label="Loading team">
+    <div
+      class="tw:grid tw:grid-cols-3 tw:gap-[var(--space-24)] tw:max-lg:grid-cols-2 tw:max-md:grid-cols-1"
+      aria-label="Loading team"
+    >
       @for (item of [1, 2, 3]; track item) {
-        <app-skeleton variant="stat-card" />
+        <app-skeleton class="tw:block tw:min-w-0" variant="stat-card" />
       }
     </div>
   } @else if (members().length === 0) {
@@ -20,28 +31,58 @@
       message="Assignees appear here after tasks are assigned."
     />
   } @else {
-    <div class="page__grid">
+    <div
+      class="tw:grid tw:grid-cols-3 tw:gap-[var(--space-24)] tw:max-lg:grid-cols-2 tw:max-md:grid-cols-1"
+    >
       @for (member of members(); track member.assignee.id) {
-        <article class="card">
-          <div class="card__identity">
+        <article
+          class="tw:flex tw:flex-col tw:gap-[var(--space-16)] tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+        >
+          <div class="tw:flex tw:min-w-0 tw:items-center tw:gap-[var(--space-16)]">
             <app-user-avatar [assignee]="member.assignee" size="md" />
             <div>
-              <h2>{{ member.assignee.name }}</h2>
-              <p>{{ member.assignee.email }}</p>
+              <h2
+                class="tw:m-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+              >
+                {{ member.assignee.name }}
+              </h2>
+              <p
+                class="tw:mt-[var(--space-4)] tw:mb-0 tw:overflow-hidden tw:text-ellipsis tw:[font-size:var(--font-size-meta)] tw:text-[var(--color-grey-46)]"
+              >
+                {{ member.assignee.email }}
+              </p>
             </div>
           </div>
-          <dl class="card__stats">
+          <dl class="tw:m-0 tw:grid tw:grid-cols-3 tw:gap-[var(--space-8)]">
             <div>
-              <dt>Assigned</dt>
-              <dd>{{ member.total }}</dd>
+              <dt class="tw:[font-size:var(--font-size-priority)] tw:text-[var(--color-grey-46)]">
+                Assigned
+              </dt>
+              <dd
+                class="tw:mt-[var(--space-4)] tw:mb-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+              >
+                {{ member.total }}
+              </dd>
             </div>
             <div>
-              <dt>In progress</dt>
-              <dd>{{ member.inProgress }}</dd>
+              <dt class="tw:[font-size:var(--font-size-priority)] tw:text-[var(--color-grey-46)]">
+                In progress
+              </dt>
+              <dd
+                class="tw:mt-[var(--space-4)] tw:mb-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+              >
+                {{ member.inProgress }}
+              </dd>
             </div>
             <div>
-              <dt>Completed</dt>
-              <dd>{{ member.done }}</dd>
+              <dt class="tw:[font-size:var(--font-size-priority)] tw:text-[var(--color-grey-46)]">
+                Completed
+              </dt>
+              <dd
+                class="tw:mt-[var(--space-4)] tw:mb-0 tw:[font-size:var(--font-size-card-title)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+              >
+                {{ member.done }}
+              </dd>
             </div>
           </dl>
         </article>

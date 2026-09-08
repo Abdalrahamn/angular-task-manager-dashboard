@@ -1,5 +1,9 @@
-<section class="page">
-  <h1>Analytics</h1>
+<section class="tw:flex tw:flex-col tw:gap-[var(--space-24)]">
+  <h1
+    class="tw:m-0 tw:[font-size:var(--font-size-stat-icon)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-32)] tw:text-[var(--color-grey-13)]"
+  >
+    Analytics
+  </h1>
 
   @if (store.tasksError()) {
     <app-error-state
@@ -8,33 +12,69 @@
       (retry)="store.retryReads()"
     />
   } @else if (store.tasksLoading()) {
-    <div class="page__rates" aria-label="Loading analytics">
-      <app-skeleton variant="stat-card" />
-      <app-skeleton variant="stat-card" />
+    <div
+      class="tw:grid tw:grid-cols-2 tw:gap-[var(--space-24)] tw:max-lg:grid-cols-1"
+      aria-label="Loading analytics"
+    >
+      <app-skeleton class="tw:block tw:min-w-0" variant="stat-card" />
+      <app-skeleton class="tw:block tw:min-w-0" variant="stat-card" />
     </div>
   } @else if (series().total === 0) {
     <app-empty-state title="No task data yet" message="Charts appear once the board has tasks." />
   } @else {
-    <div class="page__rates">
-      <article class="rate">
-        <p class="rate__label">Completion rate</p>
-        <p class="rate__value">{{ series().completionRate | percent: '1.0-0' }}</p>
-        <p class="rate__meta">
+    <div class="tw:grid tw:grid-cols-2 tw:gap-[var(--space-24)] tw:max-lg:grid-cols-1">
+      <article
+        class="tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+      >
+        <p
+          class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-grey-46)]"
+        >
+          Completion rate
+        </p>
+        <p
+          class="tw:mt-[var(--space-8)] tw:mb-0 tw:[font-size:var(--font-size-stat-value)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-384)] tw:text-[var(--color-grey-13)]"
+        >
+          {{ series().completionRate | percent: '1.0-0' }}
+        </p>
+        <p
+          class="tw:mt-[var(--space-4)] tw:mb-0 tw:[font-size:var(--font-size-meta)] tw:text-[var(--color-grey-46)]"
+        >
           {{ series().completed | number }} of {{ series().total | number }} done
         </p>
       </article>
-      <article class="rate">
-        <p class="rate__label">Overdue rate</p>
-        <p class="rate__value">{{ series().overdueRate | percent: '1.0-0' }}</p>
-        <p class="rate__meta">{{ series().overdue | number }} open tasks past due</p>
+      <article
+        class="tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+      >
+        <p
+          class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-medium)] tw:text-[var(--color-grey-46)]"
+        >
+          Overdue rate
+        </p>
+        <p
+          class="tw:mt-[var(--space-8)] tw:mb-0 tw:[font-size:var(--font-size-stat-value)] tw:font-[var(--font-weight-bold)] tw:leading-[var(--line-height-384)] tw:text-[var(--color-grey-13)]"
+        >
+          {{ series().overdueRate | percent: '1.0-0' }}
+        </p>
+        <p
+          class="tw:mt-[var(--space-4)] tw:mb-0 tw:[font-size:var(--font-size-meta)] tw:text-[var(--color-grey-46)]"
+        >
+          {{ series().overdue | number }} open tasks past due
+        </p>
       </article>
     </div>
 
-    <div class="page__charts">
+    <div class="tw:grid tw:grid-cols-2 tw:gap-[var(--space-24)] tw:max-lg:grid-cols-1">
       @defer {
-        <article class="chart-card">
-          <h2>Status</h2>
+        <article
+          class="tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+        >
+          <h2
+            class="tw:m-0 tw:mb-[var(--space-16)] tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+          >
+            Status
+          </h2>
           <app-analytics-chart
+            class="tw:block tw:h-[260px]"
             label="Tasks by status"
             chartType="doughnut"
             [labels]="statusLabels"
@@ -42,9 +82,16 @@
             [colors]="['#757575', '#f57c00', '#388e3c']"
           />
         </article>
-        <article class="chart-card">
-          <h2>Priority</h2>
+        <article
+          class="tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+        >
+          <h2
+            class="tw:m-0 tw:mb-[var(--space-16)] tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+          >
+            Priority
+          </h2>
           <app-analytics-chart
+            class="tw:block tw:h-[260px]"
             label="Tasks by priority"
             chartType="doughnut"
             [labels]="priorityLabels"
@@ -52,9 +99,16 @@
             [colors]="['#d32f2f', '#f57c00', '#388e3c']"
           />
         </article>
-        <article class="chart-card chart-card--wide">
-          <h2>Tasks per assignee</h2>
+        <article
+          class="tw:col-span-full tw:rounded-[var(--radius-8)] tw:bg-[var(--color-white-solid)] tw:p-[var(--space-16)] tw:shadow-[var(--shadow-stat)]"
+        >
+          <h2
+            class="tw:m-0 tw:mb-[var(--space-16)] tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-bold)] tw:text-[var(--color-grey-13)]"
+          >
+            Tasks per assignee
+          </h2>
           <app-analytics-chart
+            class="tw:block tw:h-[260px]"
             label="Assigned tasks"
             chartType="bar"
             [labels]="assigneeLabels()"
@@ -63,7 +117,9 @@
           />
         </article>
       } @placeholder {
-        <p class="page__placeholder">Loading charts…</p>
+        <p class="tw:m-0 tw:[font-size:var(--font-size-meta)] tw:text-[var(--color-grey-46)]">
+          Loading charts…
+        </p>
       }
     </div>
   }

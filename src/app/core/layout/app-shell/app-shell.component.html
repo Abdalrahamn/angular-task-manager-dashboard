@@ -35,12 +35,16 @@
 
   @if (notifications.message(); as message) {
     <div
-      class="snackbar tw:fixed tw:right-[var(--space-24)] tw:bottom-[var(--space-24)] tw:z-[var(--z-snackbar)] tw:flex tw:max-w-[min(420px,calc(100vw-48px))] tw:items-center tw:gap-[var(--space-16)] tw:rounded-[var(--radius-4)] tw:bg-[var(--color-grey-13)] tw:px-4 tw:py-3 tw:text-[var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-white-solid)] tw:shadow-[var(--shadow-stat)]"
+      class="snackbar tw:fixed tw:right-[var(--space-24)] tw:bottom-[var(--space-24)] tw:z-[var(--z-snackbar)] tw:flex tw:max-w-[min(420px,calc(100vw-48px))] tw:items-center tw:gap-[var(--space-16)] tw:rounded-[var(--radius-4)] tw:bg-[var(--color-grey-13)] tw:px-4 tw:py-3 tw:[font-size:var(--font-size-meta)] tw:leading-[var(--line-height-192)] tw:text-[var(--color-white-solid)] tw:shadow-[var(--shadow-stat)]"
       role="status"
       aria-live="polite"
     >
       <span>{{ message }}</span>
-      <button type="button" class="snackbar__dismiss" (click)="notifications.clear()">
+      <button
+        type="button"
+        class="snackbar__dismiss tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-0 tw:[font-size:var(--font-size-meta)] tw:font-[var(--font-weight-medium)] tw:!text-[var(--color-white-solid)]"
+        (click)="notifications.clear()"
+      >
         Dismiss
       </button>
     </div>
