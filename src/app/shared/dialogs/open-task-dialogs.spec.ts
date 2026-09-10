@@ -2,7 +2,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { cacheInterceptor } from '../../core/interceptors/cache.interceptor';
 import { errorInterceptor } from '../../core/interceptors/error.interceptor';
 import { Task } from '../models/task.model';
@@ -31,7 +30,6 @@ describe('open-task-dialogs', () => {
       providers: [
         provideHttpClient(withInterceptors([cacheInterceptor, errorInterceptor])),
         provideHttpClientTesting(),
-        provideAnimations(),
       ],
     }).compileComponents();
 

@@ -1,4 +1,3 @@
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
 import { Task } from '../../models/task.model';
 import { TaskCard } from './task-card.component';
@@ -25,7 +24,6 @@ describe('TaskCard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TaskCard],
-      providers: [provideAnimations()],
     }).compileComponents();
   });
 

@@ -3,7 +3,6 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { vi } from 'vitest';
 import { routes } from '../../../app.routes';
@@ -55,7 +54,6 @@ describe('AppShell', () => {
         provideRouter(routes),
         provideHttpClient(withInterceptors([cacheInterceptor, errorInterceptor])),
         provideHttpClientTesting(),
-        provideAnimations(),
       ],
     }).compileComponents();
 

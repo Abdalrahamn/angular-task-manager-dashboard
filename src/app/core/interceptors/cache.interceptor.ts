@@ -13,7 +13,7 @@ import { retry, tap } from 'rxjs/operators';
 export const HTTP_GET_CACHE_TTL_MS = 30_000;
 
 /** GET retries after the first failure. Writes are never auto-retried. */
-export const HTTP_GET_RETRY_COUNT = 1;
+const HTTP_GET_RETRY_COUNT = 1;
 
 interface CacheEntry {
   expiresAt: number;

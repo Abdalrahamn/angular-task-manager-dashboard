@@ -78,10 +78,6 @@ a {
   z-index: var(--z-dialog);
 }
 
-.cdk-drag-preview {
-  box-sizing: border-box;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -2,7 +2,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { vi } from 'vitest';
 import { cacheInterceptor } from '../../../core/interceptors/cache.interceptor';
 import { errorInterceptor } from '../../../core/interceptors/error.interceptor';
@@ -31,7 +30,6 @@ async function setup() {
     providers: [
       provideHttpClient(withInterceptors([cacheInterceptor, errorInterceptor])),
       provideHttpClientTesting(),
-      provideAnimations(),
       { provide: MAT_DIALOG_DATA, useValue: { task } },
       { provide: MatDialogRef, useValue: { close } },
     ],

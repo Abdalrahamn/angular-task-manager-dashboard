@@ -3,7 +3,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { vi } from 'vitest';
 import { cacheInterceptor } from '../../core/interceptors/cache.interceptor';
 import { errorInterceptor } from '../../core/interceptors/error.interceptor';
@@ -46,7 +45,6 @@ async function configure() {
     providers: [
       provideHttpClient(withInterceptors([cacheInterceptor, errorInterceptor])),
       provideHttpClientTesting(),
-      provideAnimations(),
     ],
   }).compileComponents();
   const http = TestBed.inject(HttpTestingController);
