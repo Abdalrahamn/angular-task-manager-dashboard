@@ -101,7 +101,7 @@ Performance measures include lazy feature routes, OnPush components, signals/com
 
 The testing pyramid is intentionally small at the browser layer: colocated unit/component/service tests protect domain logic, forms, cache behavior, dialogs, view states, application bootstrap, provider wiring, and every lazy route loader; Playwright validates the highest-risk user journey in a real browser. Coverage enforces 100% statements, branches, functions, and lines without excluding bootstrap, configuration, or route files, while behavioral regression protection remains the priority.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on pushes and pull requests targeting `main`: clean install, formatting, linting, coverage tests, production build, and Chromium smoke tests.
+GitHub Actions (`.github/workflows/ci.yml`) runs on pushes and pull requests targeting `main`: clean install, formatting, linting, coverage tests, production build, and Chromium smoke tests. It installs the pinned npm 11.6.2 from `package.json` before `npm ci` because the lockfile requires that npm line — older npm releases reject its bundled-dependency entries — and `corepack prepare --activate` does not replace the preinstalled `npm` binary. Locally, `corepack npm <command>` (as used in the quick start above) resolves the same pinned npm through the `packageManager` field.
 
 ### Error and failure behavior
 
